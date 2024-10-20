@@ -1,0 +1,25 @@
+services:
+  api:
+    build:
+      context: ./backend
+    container_name: backend-container
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+volumes:
+  mongo-data:
+networks:
+  app-network:
+
