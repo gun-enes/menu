@@ -1,26 +1,48 @@
-import { useState } from "react";
 import { Category } from "./Category";
-import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
+import {useCategoryContext} from "./CategoryContext.tsx";
+import {addCategory, updateCategory} from "../../api/apiServices.tsx";
 
 interface AddButtonProps {
-  onAddCategory: (newCategory: Category) => void;
+  title: string;
+  url: string;
+  edit: boolean;
+  categoryId: string;
 }
 
-const AddButton: React.FC<AddButtonProps> = ({ onAddCategory }) => {
-  const { type = "" } = useParams();
-  const [title, setTitle] = useState("");
-  const [url, setURL] = useState("");
+const AddButton: React.FC<AddButtonProps> = ({title, url, edit, categoryId}) => {
+  const { setTitle, setURL, setEdit, data,setData,setError } = useCategoryContext();
+  const handleSubmit = async () => {
+    try {
+      const newCategory: Category = {
+        title,
+        url,
+      };
+      const updatedData = await addCategory(newCategory, data); // Pass data to the API function
+      setData(updatedData);
+      setTitle(""); // Reset form fields after submission
+      setURL("");
+      setEdit(false);
+    } catch (error: any) {
+      console.error("Error adding new category:", error.message);
+      setError(error.message);
+    }
+  };
 
-  const handleSubmit = () => {
-    const newCategory: Category = {
-      title,
-      type,
-      url,
-    };
-    onAddCategory(newCategory); // Pass the new dish data to the parent
-    setTitle(""); // Reset form fields after submission
-    setURL("");
+  const handleEdit = async () => {
+    try {
+      const newCategory: Category = {
+        title,
+        url,
+      };
+      const updatedData = await updateCategory(categoryId, newCategory, data);  // Pass data to the API function
+      setData(updatedData);
+      setTitle(""); // Reset form fields after submission
+      setURL("");
+    } catch (error: any) {
+      console.error("Error updating category:", error.message);
+      setError(error.message);
+    }
   };
 
   return (
@@ -51,18 +73,33 @@ const AddButton: React.FC<AddButtonProps> = ({ onAddCategory }) => {
               />
             </div>
           </div>
-
-          <div className="d-flex justify-content-center">
-          <Button
-                variant="contained"
-                onClick={() => {
-                  handleSubmit();
-                }}
-                style={{ color: "white" }}
+          {
+            // If the edit prop is true, render the Edit button
+            edit ? (
+                <div className="d-flex justify-content-center">
+                  <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleEdit();
+                      }}
+                      style={{color: "white", backgroundColor: "green"}}
+                  >
+                    Düzenle
+                  </Button>
+                </div>
+            ) :
+                <div className="d-flex justify-content-center">
+              <Button
+                  variant="contained"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  style={{color: "white"}}
               >
                 Ekle
               </Button>
-          </div>
+            </div>
+          }
         </div>
       </div>
       <div className="col-md-3"></div>

@@ -1,41 +1,28 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import AddButton from "./AddCategory";
 import { Category } from "./Category";
 import CategoryDatacard from "./CategoryDatacard";
 import { Button } from "@mui/material";
+import {CategoryContext} from "./CategoryContext.tsx";
+import {getCategories} from "../../api/apiServices.tsx";
+
 
 export default function CategoryList() {
-  const [data, setData] = useState<Category[] | null>(null);
+  const [data, setData] = useState<Category[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [toggleButton, setToggleButton] = useState<boolean>();
+  const [title, setTitle] = useState("");
+  const [url, setURL] = useState("");
+  const [edit, setEdit] = useState<boolean>(false);
+  const [categoryId, setCategoryId] = useState<string>("");
 
-  // Function to add a new category and update the list
-  const handleAddCategory = async (newCategory: Category) => {
-    try {
-      const response = await axios.post<Category>(
-        "http://localhost:4000/categories",
-        newCategory
-      );
-      // Add the new category to the existing list
-      if (data) {
-        setData([...data, response.data]);
-      }
-    } catch (error: any) {
-      console.error("Error adding new category:", error.message);
-      setError(error.message);
-    }
-  };
 
-  // Fetch the categories data on component load
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<Category[]>(
-          `http://localhost:4000/categories/`
-        );
-        setData(response.data);
+        const categories = await getCategories(); // Fetch data from the API
+        setData(categories);
         setLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -46,19 +33,7 @@ export default function CategoryList() {
     fetchData();
   }, []);
 
-  // Function to delete a category by ID
-  const handleDeleteCategory = async (id: string) => {
-    try {
-      await axios.delete(`http://localhost:4000/categories/${id}`);
-      // After successful deletion, update the list
-      if (data) {
-        setData(data.filter((item) => item._id !== id));
-      }
-    } catch (error: any) {
-      console.error("Error deleting category:", error.message);
-      setError(error.message);
-    }
-  };
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -79,6 +54,9 @@ export default function CategoryList() {
                 variant="contained"
                 onClick={() => {
                   setToggleButton(!toggleButton);
+                  setTitle(""); // Reset form fields after submission
+                  setURL("");
+                  setEdit(false);
                 }}
                 style={{ color: "white" }}
               >
@@ -88,12 +66,10 @@ export default function CategoryList() {
           </div>
         </div>
       </div>
-      {toggleButton ? <AddButton onAddCategory={handleAddCategory} /> : null}
-      <CategoryDatacard
-        data={data}
-        edit={toggleButton}
-        handleDeleteCategory={handleDeleteCategory}
-      />
+      <CategoryContext.Provider value={{setTitle,setURL,setEdit, data, setData, setError}}>
+        {toggleButton ? <AddButton title={title} url={url} edit={edit} categoryId={categoryId}/> : null}
+        <CategoryDatacard arrange={toggleButton} setCategoryId={setCategoryId}/>
+        </CategoryContext.Provider>
     </>
   );
 }

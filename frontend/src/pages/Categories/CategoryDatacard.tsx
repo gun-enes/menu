@@ -1,4 +1,3 @@
-import { Category } from "./Category";
 import {
   List,
   ListItem,
@@ -8,26 +7,35 @@ import {
   IconButton,
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
-import { useNavigate } from "react-router-dom";
+import {useCategoryContext} from "./CategoryContext.tsx";
+import {useNavigate} from "react-router-dom";
+import {deleteCategory} from "../../api/apiServices.tsx";
 
 interface CategoryDatacardProps {
-  data: Category[] | null;
-  edit: boolean | undefined;
-  handleDeleteCategory: (id: string) => void;
+  arrange: boolean | undefined;
+  setCategoryId: (categoryId: string) => void;
 }
 
 export default function CategoryDatacard({
-  data,
-  edit,
-  handleDeleteCategory,
+  arrange,
+  setCategoryId,
 }: CategoryDatacardProps) 
 
 {
+  const { setTitle, setURL, setEdit, data, setData, setError} = useCategoryContext();
   const navigate = useNavigate();
-const handleClick = (link: string) => {
-  navigate(link); // Client-side routing without page reload
-};
+  const handleClick = (link: string) => {
+    navigate(link); // Client-side routing without page reload
+  };
+  const handleDeleteCategory = async (id: string) => {
+    try {
+      const updatedData = await deleteCategory(id, data);  // Pass data to the API function
+      setData(updatedData);
+    } catch (error: any) {
+      console.error("Error deleting category:", error.message);
+      setError(error.message);
+    }
+  };
   return (
     <div className="row">
       <div className="col-md-2"></div>
@@ -60,12 +68,16 @@ const handleClick = (link: string) => {
                 }
               />
       
-              {edit ? (
+              {arrange ? (
                 <div>
                   <Button
                     variant="contained"
                     onClick={(event) => {
                       event.stopPropagation();
+                      setURL(category.url);
+                      setTitle(category.title);
+                      setEdit(true);
+                      category._id && setCategoryId(category._id);
                     }}
                     style={{ color: "white", marginRight: "10px" }}
                   >
@@ -78,7 +90,7 @@ const handleClick = (link: string) => {
                       event.stopPropagation();
                       category._id && handleDeleteCategory(category._id);
                     }}
-                    style={{ color: "white" }}
+                    style={{ color: "white", backgroundColor: "red" }}
                   >
                     Sil
                   </Button>
