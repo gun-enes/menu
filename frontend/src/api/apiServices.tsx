@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {Category} from "../pages/Categories/Category.tsx";
+import {Dish} from "../pages/Dishes/Dish.tsx";
 export const getCategories = async () => {
     try {
         const response = await axios.get('http://localhost:4000/categories');
@@ -45,3 +46,16 @@ export const updateCategory = async (categoryId: string, updatedCategory: Catego
         throw error;
     }
 };
+
+export const updateDish = async (dishId: string, updatedDish: Dish, data?: Dish[],) => {
+    try {
+        const response = await axios.put<Dish>(
+            `http://localhost:4000/dishes/${dishId}`,
+            updatedDish
+        );
+        return (data || []).map((dish:Dish) => (dish._id === dishId ? response.data : dish));
+    } catch (error) {
+        console.error("Error updating dish:", error);
+        throw error;
+    }
+}

@@ -1,17 +1,24 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import AddButton from "./AddDish";
 import DishDatacard from "./DishDatacard";
 import { Dish } from "./Dish";
 import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
+import { DishContext } from "./DishContext";
 
 function DishList() {
-  const {category } = useParams();
-  const [data, setData] = useState<Dish[] | null>(null);
+  const {category} = useParams();
+  const [data, setData] = useState<Dish[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [toggleButton, setToggleButton] = useState<boolean>();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [url, setURL] = useState("");
+  const [price, setPrice] = useState(0);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [dishId, setDishId] = useState<string>("");
 
   // Function to add a new dish and update the list
   const handleAddDish = async (newDish: Dish) => {
@@ -30,7 +37,6 @@ function DishList() {
     }
   };
 
-  // Fetch the dishes data on component load
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,13 +94,11 @@ function DishList() {
           </div>
         </div>
       </div>
+      <DishContext.Provider value={{dishId,setDishId,setTitle,setURL,setEdit,setData, setError, setPrice, setContent,url,edit, data, price, content, title}}>
       {toggleButton ? <AddButton onAddDish={handleAddDish} /> : null}
-
-      <DishDatacard
-        data={data}
-        edit={toggleButton}
-        handleDeleteDish={handleDeleteDish}
+      <DishDatacard arrange={toggleButton} handleDeleteDish={handleDeleteDish}
       />
+        </DishContext.Provider>
     </>
   );
 }

@@ -10,7 +10,7 @@ interface AddButtonProps {
   categoryId: string;
 }
 
-const AddButton: React.FC<AddButtonProps> = ({title, url, edit, categoryId}) => {
+export default function AddButton({title, url, edit, categoryId} : AddButtonProps) {
   const { setTitle, setURL, setEdit, data,setData,setError } = useCategoryContext();
   const handleSubmit = async () => {
     try {
@@ -39,6 +39,7 @@ const AddButton: React.FC<AddButtonProps> = ({title, url, edit, categoryId}) => 
       setData(updatedData);
       setTitle(""); // Reset form fields after submission
       setURL("");
+      setEdit(false);
     } catch (error: any) {
       console.error("Error updating category:", error.message);
       setError(error.message);
@@ -106,5 +107,3 @@ const AddButton: React.FC<AddButtonProps> = ({title, url, edit, categoryId}) => 
     </div>
   );
 };
-
-export default AddButton;

@@ -1,24 +1,20 @@
-import { useState } from "react";
 import { Dish } from "./Dish";
-import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
+import {useDishContext} from "./DishContext.tsx";
+import {updateDish} from "../../api/apiServices.tsx";
+import {useParams} from "react-router-dom";
 
 interface AddButtonProps {
   onAddDish: (newDish: Dish) => void;
 }
 
-const AddButton: React.FC<AddButtonProps> = ({ onAddDish }) => {
-  const { type = "", category = "" } = useParams();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [url, setURL] = useState("");
-  const [price, setPrice] = useState(0);
-
+export default function AddButton({ onAddDish }: AddButtonProps) {
+  const {category} = useParams();
+  const { setTitle, setURL, edit,dishId,setEdit,data, setData, setError,url, title, content, price, setPrice, setContent} = useDishContext();
   const handleSubmit = () => {
     const newDish: Dish = {
       title,
       content,
-      type,
       price,
       url,
       category,
@@ -28,6 +24,28 @@ const AddButton: React.FC<AddButtonProps> = ({ onAddDish }) => {
     setContent("");
     setURL("");
     setPrice(0);
+  };
+
+  const handleEdit = async () => {
+    try {
+      const newDish: Dish = {
+        title,
+        content,
+        price,
+        url,
+        category,
+      };
+      const updatedData = await updateDish(dishId, newDish, data);  // Pass data to the API function
+      setData(updatedData);
+      setTitle(""); // Reset form fields after submission
+      setURL("");
+      setContent("");
+      setPrice(0);
+      setEdit(false);
+    } catch (error: any) {
+      console.error("Error updating category:", error.message);
+      setError(error.message);
+    }
   };
 
   return (
@@ -82,15 +100,33 @@ const AddButton: React.FC<AddButtonProps> = ({ onAddDish }) => {
           </div>
 
           <div className="d-flex justify-content-center">
-          <Button
-                variant="contained"
-                onClick={() => {
-                  handleSubmit();
-                }}
-                style={{ color: "white",marginBottom: "20px", marginTop: "20px" }}
-              >
-                Ekle
-              </Button>
+            {
+              // If the edit prop is true, render the Edit button
+              edit ? (
+                      <div className="d-flex justify-content-center">
+                        <Button
+                            variant="contained"
+                            onClick={() => {
+                              handleEdit();
+                            }}
+                            style={{color: "white", backgroundColor: "green"}}
+                        >
+                          Düzenle
+                        </Button>
+                      </div>
+                  ) :
+                  <div className="d-flex justify-content-center">
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                          handleSubmit();
+                        }}
+                        style={{color: "white"}}
+                    >
+                      Ekle
+                    </Button>
+                  </div>
+            }
           </div>
         </div>
       </div>
@@ -98,23 +134,3 @@ const AddButton: React.FC<AddButtonProps> = ({ onAddDish }) => {
     </div>
   );
 };
-
-export default AddButton;
-
-// import React from 'react'
-
-// interface AddButtonProps {
-//   onClick: () => void
-// }
-
-// function AddButton({onClick}: AddButtonProps) {
-//   return (
-//     <button
-//     onClick={onClick}
-//     >
-//       Add Menu
-//     </button>
-//   )
-// }
-
-// export default AddButton

@@ -1,13 +1,13 @@
-import { Dish } from "./Dish";
 import { Button } from "@mui/material";
+import {useDishContext} from "./DishContext.tsx";
 interface DishDatacardProps {
-  data: Dish[] | null;
-  edit: boolean | undefined;
+  arrange: boolean | undefined;
   handleDeleteDish: (id: string) => void;
 }
 
-function DishDatacard({ data, edit, handleDeleteDish }: DishDatacardProps) {
-  return (
+export default function DishDatacard({arrange, handleDeleteDish }: DishDatacardProps) {
+    const { setTitle, setURL, setEdit, data,setDishId ,setPrice, setContent} = useDishContext();
+    return (
     <>
       <div className="container">
         <div className="row">
@@ -29,11 +29,20 @@ function DishDatacard({ data, edit, handleDeleteDish }: DishDatacardProps) {
                       <p className="card-text font-weight-bold mb-0">
                         {item.price} TL
                       </p>
-                      {edit ? (
+                      {arrange ? (
                         <div>
                           <Button
                             variant="contained"
                             style={{ color: "white" , marginRight: "10px"}}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                setURL(item.url);
+                                setTitle(item.title);
+                                setContent(item.content);
+                                setPrice(item.price);
+                                setEdit(true);
+                                item._id && setDishId(item._id);
+                            }}
                           >
                             Düzenle
                           </Button>
@@ -58,5 +67,3 @@ function DishDatacard({ data, edit, handleDeleteDish }: DishDatacardProps) {
     </>
   );
 }
-
-export default DishDatacard;
