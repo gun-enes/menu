@@ -8,7 +8,6 @@ router.post('/', async (req, res) => {
         const dish = new Dish({
             title: req.body.title,
             content: req.body.content,
-            type: req.body.type,
             price: req.body.price,
             url: req.body.url,
             category: req.body.category
@@ -35,13 +34,12 @@ router.get('/', async (req, res) => {
 router.get('/:category', async (req, res) => {
   try {
       const dishCategory = req.params.category;
-      const dishType = req.query.type;
 
-      if (!dishCategory || !dishType) {
+      if (!dishCategory) {
         return res.status(400).json({ message: 'Category or Type not provided' });
       }
 
-      const dishes = await Dish.find({ category : dishCategory, type: dishType  });
+      const dishes = await Dish.find({ category : dishCategory  });
       res.json(dishes);
 
   } catch (error) {

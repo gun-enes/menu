@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 
 function DishList() {
-  const { type, category } = useParams();
+  const {category } = useParams();
   const [data, setData] = useState<Dish[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +35,7 @@ function DishList() {
     const fetchData = async () => {
       try {
         const response = await axios.get<Dish[]>(
-          `http://localhost:4000/dishes/${category}?type=${type}`
+          `http://localhost:4000/dishes/${category}`
         );
         setData(response.data);
         setLoading(false);

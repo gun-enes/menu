@@ -7,7 +7,6 @@ router.post('/', async (req, res) => {
     try {
         const category = new Category({
             title: req.body.title,
-            type: req.body.type,
             url: req.body.url,
         });
         const savedCategory = await category.save();

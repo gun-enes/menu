@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AddButton from "./AddCategory";
-import { useParams } from "react-router-dom";
 import { Category } from "./Category";
 import CategoryDatacard from "./CategoryDatacard";
 import { Button } from "@mui/material";
 
 export default function CategoryList() {
-  const { type } = useParams();
   const [data, setData] = useState<Category[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,7 +33,7 @@ export default function CategoryList() {
     const fetchData = async () => {
       try {
         const response = await axios.get<Category[]>(
-          `http://localhost:4000/categories/${type}`
+          `http://localhost:4000/categories/`
         );
         setData(response.data);
         setLoading(false);
