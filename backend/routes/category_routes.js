@@ -16,7 +16,27 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    const categoryId = req.params.id;
+    const updatedCategoryData = req.body;
 
+    try {
+        // Find category by id and update it with the new data
+        const updatedCategory = await Category.findByIdAndUpdate(
+            categoryId,
+            updatedCategoryData,
+            { new: true, runValidators: true } // `new: true` returns the updated document
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        res.status(200).json(updatedCategory); // Send back the updated category
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating category', error: error.message });
+    }
+});
 // Get all category entries
 router.get('/', async (req, res) => {
     try {
