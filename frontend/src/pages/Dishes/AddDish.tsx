@@ -1,17 +1,14 @@
 import { Dish } from "./Dish";
 import { Button } from "@mui/material";
 import {useDishContext} from "./DishContext.tsx";
-import {updateDish} from "../../api/apiServices.tsx";
+import {addDish, updateDish} from "../../api/Dishes.tsx";
 import {useParams} from "react-router-dom";
 
-interface AddButtonProps {
-  onAddDish: (newDish: Dish) => void;
-}
 
-export default function AddButton({ onAddDish }: AddButtonProps) {
+export default function AddButton() {
   const {category} = useParams();
   const { setTitle, setURL, edit,dishId,setEdit,data, setData, setError,url, title, content, price, setPrice, setContent} = useDishContext();
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newDish: Dish = {
       title,
       content,
@@ -19,7 +16,8 @@ export default function AddButton({ onAddDish }: AddButtonProps) {
       url,
       category,
     };
-    onAddDish(newDish); // Pass the new dish data to the parent
+    const updatedData = await addDish(newDish, data); // Pass data to the API function
+    setData(updatedData);
     setTitle(""); // Reset form fields after submission
     setContent("");
     setURL("");

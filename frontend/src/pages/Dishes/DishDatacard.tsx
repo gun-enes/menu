@@ -1,12 +1,24 @@
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 import {useDishContext} from "./DishContext.tsx";
+import {deleteDish} from "../../api/Dishes.tsx";
+import Modal from "../../components/modal/Modal.tsx";
+
 interface DishDatacardProps {
   arrange: boolean | undefined;
-  handleDeleteDish: (id: string) => void;
 }
 
-export default function DishDatacard({arrange, handleDeleteDish }: DishDatacardProps) {
-    const { setTitle, setURL, setEdit, data,setDishId ,setPrice, setContent} = useDishContext();
+export default function DishDatacard({arrange}: DishDatacardProps) {
+    const { setTitle, setURL, setEdit, data,setDishId ,setPrice, setContent, setData, setError} = useDishContext();
+
+    const handleDeleteDish = async (id: string) => {
+        try {
+            const updatedData = await deleteDish(id, data);  // Pass data to the API function
+            setData(updatedData);
+        } catch (error: any) {
+            console.error("Error deleting category:", error.message);
+            setError(error.message);
+        }
+    };
     return (
     <>
       <div className="container">
@@ -46,15 +58,9 @@ export default function DishDatacard({arrange, handleDeleteDish }: DishDatacardP
                           >
                             Düzenle
                           </Button>
-                          <Button
-                            variant="contained"
-                            onClick={() => {
-                              item._id && handleDeleteDish(item._id);
-                            }}
-                            style={{ color: "white", backgroundColor: "red" }}
-                          >
-                            Sil
-                          </Button>
+                            <Modal item={item} handleDeleteDish={handleDeleteDish}/>
+
+
                         </div>
                       ) : null}
                     </div>

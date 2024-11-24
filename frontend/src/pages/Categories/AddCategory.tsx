@@ -1,7 +1,7 @@
 import { Category } from "./Category";
 import { Button } from "@mui/material";
 import {useCategoryContext} from "./CategoryContext.tsx";
-import {addCategory, updateCategory} from "../../api/apiServices.tsx";
+import {addCategory, updateCategory} from "../../api/Categories.tsx";
 
 interface AddButtonProps {
   title: string;

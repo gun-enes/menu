@@ -9,7 +9,7 @@ import {
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {useCategoryContext} from "./CategoryContext.tsx";
 import {useNavigate} from "react-router-dom";
-import {deleteCategory} from "../../api/apiServices.tsx";
+import {deleteCategory} from "../../api/Categories.tsx";
 
 interface CategoryDatacardProps {
   arrange: boolean | undefined;
@@ -24,6 +24,7 @@ export default function CategoryDatacard({
 {
   const { setTitle, setURL, setEdit, data, setData, setError} = useCategoryContext();
   const navigate = useNavigate();
+
   const handleClick = (link: string) => {
     navigate(link); // Client-side routing without page reload
   };
@@ -83,7 +84,9 @@ export default function CategoryDatacard({
                   >
                     Düzenle
                   </Button>
-      
+
+
+
                   <Button
                     variant="contained"
                     onClick={(event) => {

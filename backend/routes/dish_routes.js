@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Dish = require('../models/dishes'); // Adjust the path as needed
+const Dish = require('../models/dishes');
+const Category = require("../models/category"); // Adjust the path as needed
 
 // Create a new dish entry
 router.post('/', async (req, res) => {
@@ -16,6 +17,28 @@ router.post('/', async (req, res) => {
         res.status(201).json(savedDish);
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const categoryId = req.params.id;
+    const updatedCategoryData = req.body;
+
+    try {
+        // Find category by id and update it with the new data
+        const updatedCategory = await Dish.findByIdAndUpdate(
+            categoryId,
+            updatedCategoryData,
+            { new: true, runValidators: true } // `new: true` returns the updated document
+        );
+
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        res.status(200).json(updatedCategory); // Send back the updated category
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating category', error: error.message });
     }
 });
 

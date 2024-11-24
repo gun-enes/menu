@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import AddButton from "./AddDish";
 import DishDatacard from "./DishDatacard";
 import { Dish } from "./Dish";
 import { useParams } from "react-router-dom";
 import { Button } from "@mui/material";
 import { DishContext } from "./DishContext";
+import {getDishes} from "../../api/Dishes.tsx";
+import Modal from "../../components/modal/Modal.tsx";
 
 function DishList() {
   const {category} = useParams();
@@ -20,30 +21,11 @@ function DishList() {
   const [edit, setEdit] = useState<boolean>(false);
   const [dishId, setDishId] = useState<string>("");
 
-  // Function to add a new dish and update the list
-  const handleAddDish = async (newDish: Dish) => {
-    try {
-      const response = await axios.post<Dish>(
-        "http://localhost:4000/dishes",
-        newDish
-      );
-      // Add the new dish to the existing list
-      if (data) {
-        setData([...data, response.data]);
-      }
-    } catch (error: any) {
-      console.error("Error adding new dish:", error.message);
-      setError(error.message);
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<Dish[]>(
-          `http://localhost:4000/dishes/${category}`
-        );
-        setData(response.data);
+        const dishes = await getDishes(); // Fetch data from the API
+        setData(dishes);
         setLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -54,19 +36,6 @@ function DishList() {
     fetchData();
   }, []);
 
-  // Function to delete a dish by ID
-  const handleDeleteDish = async (id: string) => {
-    try {
-      await axios.delete(`http://localhost:4000/dishes/${id}`);
-      // After successful deletion, update the list
-      if (data) {
-        setData(data.filter((item) => item._id !== id));
-      }
-    } catch (error: any) {
-      console.error("Error deleting dish:", error.message);
-      setError(error.message);
-    }
-  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -94,9 +63,11 @@ function DishList() {
           </div>
         </div>
       </div>
+      <Modal/>
+
       <DishContext.Provider value={{dishId,setDishId,setTitle,setURL,setEdit,setData, setError, setPrice, setContent,url,edit, data, price, content, title}}>
-      {toggleButton ? <AddButton onAddDish={handleAddDish} /> : null}
-      <DishDatacard arrange={toggleButton} handleDeleteDish={handleDeleteDish}
+      {toggleButton ? <AddButton /> : null}
+      <DishDatacard arrange={toggleButton}
       />
         </DishContext.Provider>
     </>

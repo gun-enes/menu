@@ -4,7 +4,7 @@ import { Category } from "./Category";
 import CategoryDatacard from "./CategoryDatacard";
 import { Button } from "@mui/material";
 import {CategoryContext} from "./CategoryContext.tsx";
-import {getCategories} from "../../api/apiServices.tsx";
+import {getCategories} from "../../api/Categories.tsx";
 
 
 export default function CategoryList() {
@@ -12,6 +12,7 @@ export default function CategoryList() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [toggleButton, setToggleButton] = useState<boolean>();
+  const [toggleDisplay, setToggleDisplay] = useState<boolean>(true);
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
   const [edit, setEdit] = useState<boolean>(false);
@@ -48,28 +49,49 @@ export default function CategoryList() {
               <h1>MENÜ</h1>
             </div>
           </div>
+
           <div className="col">
-            <div className="d-flex justify-content-end">
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setToggleButton(!toggleButton);
-                  setTitle(""); // Reset form fields after submission
-                  setURL("");
-                  setEdit(false);
-                }}
-                style={{ color: "white" }}
-              >
-                Düzenle
-              </Button>
+            <div className="row">
+              <div className="col">
+                <div className="d-flex justify-content-end">
+                  <Button
+                      variant="contained"
+                      onClick={() => setToggleDisplay(!toggleDisplay)}
+                      style={{color: "white"}}
+                  >
+                    Izgara Görünümü
+                  </Button>
+                </div>
+              </div>
+              <div className="col"
+                  /*style={{display: "flex", justifyContent: "flex-end"}}*/>
+                <div className="d-flex justify-content-start">
+                  <Button
+                      variant="contained"
+                      onClick={() => {
+                        setToggleButton(!toggleButton);
+                        setTitle(""); // Reset form fields after submission
+                        setURL("");
+                        setEdit(false);
+                      }}
+                      style={{color: "white"}}
+                  >
+                    Düzenle
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <CategoryContext.Provider value={{setTitle,setURL,setEdit, data, setData, setError}}>
+      {toggleDisplay ?
+      <CategoryContext.Provider value={{setTitle, setURL, setEdit, data, setData, setError}}>
         {toggleButton ? <AddButton title={title} url={url} edit={edit} categoryId={categoryId}/> : null}
         <CategoryDatacard arrange={toggleButton} setCategoryId={setCategoryId}/>
-        </CategoryContext.Provider>
+      </CategoryContext.Provider>
+      :
+      null}
     </>
+
   );
 }

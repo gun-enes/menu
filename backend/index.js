@@ -45,6 +45,6 @@ app.use('/types', type_route);
 
 
 // Start the HTTP server
-const server = app.listen(4000, () => {
+const server = app.listen(4000, '0.0.0.0', () => {
     console.log('Server is running on port 4000');
 });
