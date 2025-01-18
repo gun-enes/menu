@@ -31,7 +31,7 @@ export default function Modal({item, handleDeleteDish}:ModalProps) {
                 <div className="modal-overlay" onClick={toggleModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <h2>Emin misiniz?</h2>
-                        <p>Pepperoni Pizza silinecektir</p>
+                        <p>{item.title} silinecektir</p>
                         <button onClick={()=> {
                             item._id && handleDeleteDish(item._id);
                         }

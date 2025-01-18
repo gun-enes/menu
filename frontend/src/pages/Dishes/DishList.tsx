@@ -3,16 +3,18 @@ import AddButton from "./AddDish";
 import DishDatacard from "./DishDatacard";
 import { Dish } from "./Dish";
 import { useParams } from "react-router-dom";
-import { Button } from "@mui/material";
 import { DishContext } from "./DishContext";
-import {getDishes} from "../../api/Dishes.tsx";
-import Modal from "../../components/modal/Modal.tsx";
+import {addDish, getDishes} from "../../api/Dishes.tsx";
+import Navbar from "../../components/NavBar.tsx";
+import CustomButton from "../../components/CustomButton.tsx";
+import AddCategoryModal from "../../components/AddCategoryModal.tsx";
 
 function DishList() {
   const {category} = useParams();
   const [data, setData] = useState<Dish[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [toggleButton, setToggleButton] = useState<boolean>();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -36,41 +38,68 @@ function DishList() {
     fetchData();
   }, []);
 
+  const handleSubmit = async (title: string, content: string, price: number, url: string, category:string) => {
+    const newDish: Dish = {
+      title,
+      content,
+      price,
+      url,
+      category,
+    };
+    const updatedData = await addDish(newDish, data); // Pass data to the API function
+    setData(updatedData);
+    setTitle("");
+    setContent("");
+    setURL("");
+    setPrice(0);
+  };
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <>
-      <div className="container">
-        <div className="row">
-          <div className="col"></div>
-          <div className="col">
-            <div className="text-center mb-4">
-              <h1>{category?.toUpperCase()}</h1>
+      <>
+        <Navbar title={category?.toUpperCase()}/>
+        <nav style={{
+          background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background
+          padding: '0px 0px 30px 0px',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        }}>
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col">
+                <div className="d-flex gap-3">
+                  <CustomButton text={"Ekle"} buttonBehaviour={() => setIsModalOpen(!isModalOpen)}/>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col">
-            <div className="d-flex justify-content-end">
-              <Button
-                variant="contained"
-                onClick={() => setToggleButton(!toggleButton)}
-                style={{ color: "white", marginRight: "10px" }}
-              >
-                Düzenle
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <Modal/>
+        </nav>
 
-      <DishContext.Provider value={{dishId,setDishId,setTitle,setURL,setEdit,setData, setError, setPrice, setContent,url,edit, data, price, content, title}}>
-      {toggleButton ? <AddButton /> : null}
-      <DishDatacard arrange={toggleButton}
-      />
+        <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
+        <DishContext.Provider value={{
+          dishId,
+          setDishId,
+          setTitle,
+          setURL,
+          setEdit,
+          setData,
+          setError,
+          setPrice,
+          setContent,
+          url,
+          edit,
+          data,
+          price,
+          content,
+          title
+        }}>
+          {toggleButton ? <AddButton/> : null}
+          <DishDatacard arrange={toggleButton}
+          />
         </DishContext.Provider>
-    </>
+      </>
   );
 }
 

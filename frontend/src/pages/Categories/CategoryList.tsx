@@ -1,22 +1,20 @@
 import { useState, useEffect } from "react";
-import AddButton from "./AddCategory";
 import { Category } from "./Category";
 import CategoryDatacard from "./CategoryDatacard";
-import { Button } from "@mui/material";
 import {CategoryContext} from "./CategoryContext.tsx";
-import {getCategories} from "../../api/Categories.tsx";
+import {addCategory, getCategories} from "../../api/Categories.tsx";
+import GridDatacard from "./GridDatacard.tsx";
+import Navbar from "../../components/NavBar.tsx";
+import CustomButton from "../../components/CustomButton.tsx";
+import AddCategoryModal from "../../components/AddCategoryModal.tsx";
 
 
 export default function CategoryList() {
   const [data, setData] = useState<Category[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [toggleButton, setToggleButton] = useState<boolean>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [toggleDisplay, setToggleDisplay] = useState<boolean>(true);
-  const [title, setTitle] = useState("");
-  const [url, setURL] = useState("");
-  const [edit, setEdit] = useState<boolean>(false);
-  const [categoryId, setCategoryId] = useState<string>("");
 
 
   useEffect(() => {
@@ -34,64 +32,55 @@ export default function CategoryList() {
     fetchData();
   }, []);
 
+  const handleSubmit = async (title: string, url: string) => {
+    try {
+      const newCategory: Category = {
+        title,
+        url,
+      };
+      const updatedData = await addCategory(newCategory, data); // Pass data to the API function
+      setData(updatedData);
+    } catch (error: any) {
+      console.error("Error adding new category:", error.message);
+      setError(error.message);
+    }
+  };
+
 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <>
-      <div className="container">
-        <div className="row">
-          <div className="col"></div>
-          <div className="col">
-            <div className="text-center mb-4">
-              <h1>MENÜ</h1>
-            </div>
-          </div>
+      <>
 
-          <div className="col">
-            <div className="row">
+        <Navbar title={"MENÜ"}/>
+
+        <nav style={{
+          background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background
+          padding: '0px 0px 30px 0px',
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        }}>
+          <div className="container">
+            <div className="row align-items-center">
               <div className="col">
-                <div className="d-flex justify-content-end">
-                  <Button
-                      variant="contained"
-                      onClick={() => setToggleDisplay(!toggleDisplay)}
-                      style={{color: "white"}}
-                  >
-                    Izgara Görünümü
-                  </Button>
-                </div>
-              </div>
-              <div className="col"
-                  /*style={{display: "flex", justifyContent: "flex-end"}}*/>
-                <div className="d-flex justify-content-start">
-                  <Button
-                      variant="contained"
-                      onClick={() => {
-                        setToggleButton(!toggleButton);
-                        setTitle(""); // Reset form fields after submission
-                        setURL("");
-                        setEdit(false);
-                      }}
-                      style={{color: "white"}}
-                  >
-                    Düzenle
-                  </Button>
+                <div className="d-flex gap-3"> {/* Add gap between buttons */}
+                  <CustomButton text={"Görünüm"} buttonBehaviour={() => setToggleDisplay(!toggleDisplay)}/>
+                  <CustomButton text={"Ekle"} buttonBehaviour={() => setIsModalOpen(!isModalOpen)}/>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      {toggleDisplay ?
-      <CategoryContext.Provider value={{setTitle, setURL, setEdit, data, setData, setError}}>
-        {toggleButton ? <AddButton title={title} url={url} edit={edit} categoryId={categoryId}/> : null}
-        <CategoryDatacard arrange={toggleButton} setCategoryId={setCategoryId}/>
-      </CategoryContext.Provider>
-      :
-      null}
-    </>
+        </nav>
+        <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
+
+        <CategoryContext.Provider value={{data, setData, setError}}>
+            {toggleDisplay ?
+                <GridDatacard/>
+                :
+                <CategoryDatacard arrange={true} setCategoryId={()=>{}}/>}
+        </CategoryContext.Provider>
+      </>
 
   );
 }

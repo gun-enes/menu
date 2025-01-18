@@ -22,7 +22,7 @@ export default function CategoryDatacard({
 }: CategoryDatacardProps) 
 
 {
-  const { setTitle, setURL, setEdit, data, setData, setError} = useCategoryContext();
+  const {data, setData, setError} = useCategoryContext();
   const navigate = useNavigate();
 
   const handleClick = (link: string) => {
@@ -52,6 +52,7 @@ export default function CategoryDatacard({
               }}
               style={{
                 background: `url(${category.url})`,
+                backgroundColor: "rgba(0,0,0,0.3)",
                 backgroundSize: "cover",
                 height: "100px",
                 marginBottom: "10px",
@@ -62,7 +63,7 @@ export default function CategoryDatacard({
                 primary={
                   <Typography
                     variant="h5"
-                    style={{ color: "white", fontWeight: "bold" }}
+                    style={{ color: "Black", fontWeight: "bold" }}
                   >
                     {category.title}
                   </Typography>
@@ -75,9 +76,6 @@ export default function CategoryDatacard({
                     variant="contained"
                     onClick={(event) => {
                       event.stopPropagation();
-                      setURL(category.url);
-                      setTitle(category.title);
-                      setEdit(true);
                       category._id && setCategoryId(category._id);
                     }}
                     style={{ color: "white", marginRight: "10px" }}

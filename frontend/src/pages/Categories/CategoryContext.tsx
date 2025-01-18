@@ -2,9 +2,6 @@ import { useContext, createContext } from 'react';
 import {Category} from "./Category.tsx";
 
 interface CategoryContextProps {
-    setTitle: (title: string) => void;
-    setURL: (url: string) => void;
-    setEdit: (edit: boolean) => void
     setData: (data: Category[]) => void;
     setError: (error: string) => void;
     data?: Category[]

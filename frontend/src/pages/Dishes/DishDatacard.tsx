@@ -59,8 +59,6 @@ export default function DishDatacard({arrange}: DishDatacardProps) {
                             Düzenle
                           </Button>
                             <Modal item={item} handleDeleteDish={handleDeleteDish}/>
-
-
                         </div>
                       ) : null}
                     </div>
