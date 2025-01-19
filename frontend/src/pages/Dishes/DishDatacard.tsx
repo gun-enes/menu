@@ -1,14 +1,21 @@
-import {Button} from "@mui/material";
 import {useDishContext} from "./DishContext.tsx";
-import {deleteDish} from "../../api/Dishes.tsx";
-import Modal from "../../components/modal/Modal.tsx";
+import {deleteDish, updateDish} from "../../api/Dishes.tsx";
+import CustomButton from "../../components/CustomButton.tsx";
+import ConfirmationModal from "../../components/DeleteModal.tsx";
+import {useState} from "react";
+import UpdateDishModal from "../../components/UpdateDishModal.tsx";
+import {Dish} from "./Dish.tsx";
 
-interface DishDatacardProps {
-  arrange: boolean | undefined;
-}
-
-export default function DishDatacard({arrange}: DishDatacardProps) {
-    const { setTitle, setURL, setEdit, data,setDishId ,setPrice, setContent, setData, setError} = useDishContext();
+export default function DishDatacard() {
+    const {data, setData, setError} = useDishContext();
+    const [title, setTitle] = useState("");
+    const [url, setUrl] = useState("");
+    const [id, setId] = useState("");
+    const [price, setPrice] = useState(0);
+    const [content, setContent] = useState("");
+    const [category, setCategory] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
 
     const handleDeleteDish = async (id: string) => {
         try {
@@ -19,55 +26,128 @@ export default function DishDatacard({arrange}: DishDatacardProps) {
             setError(error.message);
         }
     };
+    const handleEdit = async (id: string, title: string, content: string, price: number, url: string, category:string) => {
+        try {
+            const newDish: Dish = {
+                title,
+                content,
+                price,
+                url,
+                category,
+            };
+            const updatedData = await updateDish(id, newDish, data);  // Pass data to the API function
+            setData(updatedData);
+        } catch (error: any) {
+            console.error("Error updating category:", error.message);
+            setError(error.message);
+        }
+    };
     return (
-    <>
-      <div className="container">
-        <div className="row">
-          {data &&
-            data.map((item) => (
-              <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={item._id}>
-                <div className="card mb-4" style={{ width: "18rem" }}>
-                  {/* Make the image responsive and naturally fit the card */}
-                  <img
-                    src={item.url}
-                    className="card-img-top"
-                    alt={item.title}
-                    style={{ objectFit: "cover", height: "180px" }}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{item.title}</h5>
-                    <p className="card-text text-muted">{item.content}</p>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <p className="card-text font-weight-bold mb-0">
-                        {item.price} TL
-                      </p>
-                      {arrange ? (
-                        <div>
-                          <Button
-                            variant="contained"
-                            style={{ color: "white" , marginRight: "10px"}}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setURL(item.url);
-                                setTitle(item.title);
-                                setContent(item.content);
-                                setPrice(item.price);
-                                setEdit(true);
-                                item._id && setDishId(item._id);
-                            }}
-                          >
-                            Düzenle
-                          </Button>
-                            <Modal item={item} handleDeleteDish={handleDeleteDish}/>
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
+        <>
+
+
+            <div
+                className="container"
+                style={{
+                    backgroundColor: "#f8f4ef",
+                    padding: "30px",
+                }}
+
+            >
+                <UpdateDishModal
+                    open={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onUpdateItem={handleEdit}
+                    title={title}
+                    setTitle={setTitle}
+                    url={url}
+                    setUrl={setUrl}
+                    id={id}
+                    price={price}
+                    setPrice={setPrice}
+                    content={content}
+                    setContent={setContent}
+                    category={category}
+                />
+                <ConfirmationModal
+                    open={isConfirmationModalOpen}
+                    onClose={() => setIsConfirmationModalOpen(false)}
+                    onConfirm={() => {
+                        id && handleDeleteDish(id);
+                        setIsConfirmationModalOpen(false);
+                    }}/>
+
+                <div className="row">
+                    {data &&
+                        data.map((category) => (
+
+                            <div
+                                className="col-sm-6 col-md-4 col-lg-3 mb-4"
+                                key={category._id}
+
+                            >
+
+                                <div className="card mb-4"
+                                     style={{cursor: "pointer", borderRadius: "20px", width: "18rem"}}
+                                >
+                                    <img
+                                        src={category.url}
+                                        className="card-img-top"
+                                        alt={category.title}
+                                        style={{
+                                            objectFit: "fill",
+                                            height: "170px",
+                                            padding: "10px", // Add padding here
+                                            borderRadius: "20px"
+                                        }}/>
+                                    <div
+                                        className="card-body"
+                                    >
+                                        <h4
+                                            className="card-title"
+                                            style={{textAlign: "center", fontSize: "1.5rem", fontWeight: 600}}
+                                        >
+                                            {category.title}
+                                        </h4>
+                                        <p
+                                            className="card-text"
+                                            style={{fontSize: "1rem", fontWeight: 400}}
+                                        >
+                                            {category.content}
+                                        </p>
+                                        <h5
+                                            className="card-text justify-content-end"
+                                            style={{ fontWeight: 500, textAlign: "right"}}
+                                        >
+                                            ₺{category.price}
+                                        </h5>
+                                        <div className="d-flex justify-content-around align-items-center">
+
+                                            <CustomButton text={"Düzenle"}
+                                                          color={"#2196f3"}
+                                                          buttonBehaviour={() => {
+                                                              setTitle(category.title);
+                                                              setUrl(category.url);
+                                                              setPrice(category.price);
+                                                              setContent(category.content);
+                                                              setCategory(category.category);
+                                                              setIsModalOpen(true);
+                                                              category._id && setId(category._id);
+                                                          }}/>
+
+
+                                            <CustomButton text={"Delete"}
+                                                          color={"#f44336"}
+                                                          buttonBehaviour={() => {
+                                                              setIsConfirmationModalOpen(true);
+                                                          }}/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                 </div>
-              </div>
-            ))}
-        </div>
-      </div>
-    </>
-  );
+            </div>
+        </>
+    );
 }

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Dish = require('../models/dishes');
-const Category = require("../models/category"); // Adjust the path as needed
 
 // Create a new dish entry
 router.post('/', async (req, res) => {
@@ -42,33 +41,66 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-
-// Get all dish entries
+// 1. Get all dishes
 router.get('/', async (req, res) => {
     try {
         const dishes = await Dish.find();
-        res.json(dishes);
+        res.status(200).json(dishes);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error fetching all dishes:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 });
 
-// Get specified type category entries
-router.get('/:category', async (req, res) => {
-  try {
-      const dishCategory = req.params.category;
+// 2. Get dishes by category (using query parameter)
+router.get('/category', async (req, res) => {
+    try {
+        const categoryId = req.query.category; // Get the category ID from the query parameter
+        console.log("hiii")
+        console.log("category", categoryId)
+        // Validate the category ID
+        if (!categoryId || typeof categoryId !== 'string' || categoryId.trim() === '') {
+            return res.status(400).json({ message: 'Category ID is required' });
+        }
 
-      if (!dishCategory) {
-        return res.status(400).json({ message: 'Category or Type not provided' });
-      }
+        // Fetch dishes by category ID
+        const dishes = await Dish.find({ category: categoryId });
+        // Return the dishes with a success message
+        res.status(200).json(dishes);
 
-      const dishes = await Dish.find({ category : dishCategory  });
-      res.json(dishes);
-
-  } catch (error) {
-      res.status(500).json({ message: error.message });
-  }
+    } catch (error) {
+        console.error('Error fetching dishes by category:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
 });
+
+// 3. Get one dish by ID (using route parameter)
+router.get('/:id', async (req, res) => {
+    try {
+        const dishId = req.params.id; // Get the dish ID from the route parameter
+
+        // Validate the dish ID
+        if (!dishId || typeof dishId !== 'string' || dishId.trim() === '') {
+            return res.status(400).json({ message: 'Dish ID is required' });
+        }
+        // Fetch the dish by ID
+        const dish = await Dish.findById(dishId);
+
+        // Check if the dish was found
+        if (!dish) {
+            return res.status(404).json({ message: 'Dish not found' });
+        }
+
+        // Return the dish with a success message
+        res.status(200).json(dish);
+    } catch (error) {
+        console.error('Error fetching dish by ID:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+});
+
+
+
 
 
 // Delete a specific dish by ID

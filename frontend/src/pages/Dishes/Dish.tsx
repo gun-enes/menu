@@ -3,6 +3,6 @@ export interface Dish{
     url: string;
     title: string;
     content: string;
-    category?: string;
+    category: string;
     price: number;
 }

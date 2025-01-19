@@ -1,23 +1,27 @@
-import { useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
-interface AddDishModalProps {
+interface UpdateDishModalProps {
     open: boolean; // Controls whether the modal is open
     onClose: () => void; // Function to close the modal
-    onAddItem: (title: string, url: string, price: number, content: string, category: string) => void; // Function to handle adding the item
+    onUpdateItem: (id: string, title: string, url: string, price: number, category: string, content:string) => void;
+    title: string;
+    url: string;
+    content: string;
+    setContent: (content: string) => void;
+    price: number;
+    setPrice: (price: number) => void;
     category: string;
+    setTitle: (title: string) => void;
+    setUrl: (url: string) => void;
+    id: string;
 }
 
-export default function AddDishModal({ open, onClose, onAddItem, category }: AddDishModalProps) {
-    const [title, setTitle] = useState(''); // State for the title field
-    const [url, setUrl] = useState(''); // State for the URL field
-    const [price, setPrice] = useState(0); // State for the price field
-    const [content, setContent] = useState(''); // State for the content field
+export default function UpdateDishModal({ open, onClose, onUpdateItem, id, url, setUrl , title , setTitle, content, setContent, price, setPrice, category}: UpdateDishModalProps) {
 
     // Handle form submission
     const handleSubmit = () => {
-        if (title && url && price && content) {
-            onAddItem(title, url, price, content, category); // Pass the title and URL to the parent component
+        if (title && url && id && content && price && category) {
+            onUpdateItem(id, title, url, price,content, category); // Pass the title and URL to the parent component
             setTitle(''); // Reset the title field
             setUrl(''); // Reset the URL field
             onClose(); // Close the modal
@@ -28,7 +32,7 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
             {/* Modal Title */}
             <DialogTitle style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>
-                Add New Item
+                Kategori Düzenle
             </DialogTitle>
 
             {/* Modal Content */}
@@ -52,43 +56,43 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
                     placeholder="Enter the URL"
                 />
                 <TextField
-                    label="Price"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    value={price}
-                    onChange={(e) => setPrice(Number(e.target.value))}
-                    placeholder="Enter the Price"
-                />
-                <TextField
                     label="Content"
                     variant="outlined"
                     fullWidth
                     margin="normal"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="Enter the Content"
-                />
+                    placeholder="Enter the content"/>
+                <TextField
+                    label="Price"
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    value={price}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    placeholder="Enter the price"/>
             </DialogContent>
 
             {/* Modal Actions */}
             <DialogActions style={{ padding: '16px 24px' }}>
-                <Button onClick={() => {
+                <Button onClick={()=>{
                     setUrl("");
                     setTitle("");
-                    setPrice(0);
-                    setContent("");
-                    onClose()
+                    onClose();
                 }} style={{ color: '#666' }}>
-                    Cancel
+                    İPTAL
                 </Button>
                 <Button
-                    onClick={handleSubmit}
+                    onClick={()=>{
+                        setUrl("");
+                        setTitle("");
+                        handleSubmit();
+                    }}
                     variant="contained"
                     style={{ backgroundColor: '#f1356d', color: 'white' }}
                     disabled={!title || !url} // Disable the button if fields are empty
                 >
-                    Add Item
+                    Güncelle
                 </Button>
             </DialogActions>
         </Dialog>

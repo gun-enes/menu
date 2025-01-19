@@ -1,6 +1,6 @@
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
-interface UpdateItemModalProps {
+interface UpdateCategoryModalProps {
     open: boolean; // Controls whether the modal is open
     onClose: () => void; // Function to close the modal
     onUpdateItem: (id: string, title: string, url: string) => void;
@@ -11,7 +11,7 @@ interface UpdateItemModalProps {
     id: string;
 }
 
-export default function UpdateItemModal({ open, onClose, onUpdateItem, id, url, setUrl , title , setTitle}: UpdateItemModalProps) {
+export default function UpdateCategoryModal({ open, onClose, onUpdateItem, id, url, setUrl , title , setTitle}: UpdateCategoryModalProps) {
 
     // Handle form submission
     const handleSubmit = () => {

@@ -48,11 +48,12 @@ router.get('/', async (req, res) => {
 });
 
 // Get specified type category entries
-router.get('/:type', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-      const categoryType = req.params.type;
-      const categories = await Category.find({ type : categoryType });
-      res.json(categories);
+      const categoryId = req.params.id;
+      const category = await Category.findById(categoryId);
+      console.log("hello there")
+      res.json(category);
   } catch (error) {
       res.status(500).json({ message: error.message });
   }

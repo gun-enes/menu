@@ -1,8 +1,12 @@
+import {useParams} from "react-router-dom";
+
 interface NavbarProps {
     title: string | undefined;
 }
 
-export default function Navbar({ title }: NavbarProps) {
+export default function Navbar({ title }: NavbarProps)
+{
+    useParams();
     return (
         <nav style={{
             background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background

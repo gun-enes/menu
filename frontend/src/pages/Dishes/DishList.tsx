@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
-import AddButton from "./AddDish";
 import DishDatacard from "./DishDatacard";
 import { Dish } from "./Dish";
 import { useParams } from "react-router-dom";
 import { DishContext } from "./DishContext";
-import {addDish, getDishes} from "../../api/Dishes.tsx";
+import {addDish, getDishesByCategory} from "../../api/Dishes.tsx";
 import Navbar from "../../components/NavBar.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
-import AddCategoryModal from "../../components/AddCategoryModal.tsx";
+import AddDishModal from "../../components/AddDishModal.tsx";
+import {getCategoryById} from "../../api/Categories.tsx";
+
+
 
 function DishList() {
   const {category} = useParams();
   const [data, setData] = useState<Dish[]>();
+  const [categoryName, setCategoryName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [toggleButton, setToggleButton] = useState<boolean>();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [url, setURL] = useState("");
@@ -26,9 +28,12 @@ function DishList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dishes = await getDishes(); // Fetch data from the API
-        setData(dishes);
-        setLoading(false);
+          console.log(category);
+          const dishes = await getDishesByCategory(category); // Fetch data from the API
+          const cat = await getCategoryById(category);
+          setCategoryName(cat.title);
+          setData(dishes);
+          setLoading(false);
       } catch (error: any) {
         setError(error.message);
         setLoading(false);
@@ -38,7 +43,9 @@ function DishList() {
     fetchData();
   }, []);
 
-  const handleSubmit = async (title: string, content: string, price: number, url: string, category:string) => {
+
+
+  const handleSubmit = async (title: string, url: string, price: number, content: string, category:string) => {
     const newDish: Dish = {
       title,
       content,
@@ -48,10 +55,6 @@ function DishList() {
     };
     const updatedData = await addDish(newDish, data); // Pass data to the API function
     setData(updatedData);
-    setTitle("");
-    setContent("");
-    setURL("");
-    setPrice(0);
   };
 
 
@@ -60,7 +63,7 @@ function DishList() {
 
   return (
       <>
-        <Navbar title={category?.toUpperCase()}/>
+        <Navbar title={categoryName.toUpperCase()}/>
         <nav style={{
           background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background
           padding: '0px 0px 30px 0px',
@@ -76,8 +79,10 @@ function DishList() {
             </div>
           </div>
         </nav>
-
-        <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
+        {
+          category ?         <AddDishModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit} category={category}/>
+                : null
+        }
         <DishContext.Provider value={{
           dishId,
           setDishId,
@@ -95,8 +100,7 @@ function DishList() {
           content,
           title
         }}>
-          {toggleButton ? <AddButton/> : null}
-          <DishDatacard arrange={toggleButton}
+          <DishDatacard
           />
         </DishContext.Provider>
       </>

@@ -11,6 +11,16 @@ export const getCategories = async () => {
     }
 };
 
+export const getCategoryById = async (id?: string) => {
+    try {
+        const response = await axios.get(`http://localhost:4000/categories/${id}`);
+        return response.data;  // Return the fetched data
+    } catch (error) {
+        console.error("Error fetching category:", error);
+        throw error;
+    }
+}
+
 export const deleteCategory = async (id: string, data?: Category[]) => {
     try {
         await axios.delete(`http://localhost:4000/categories/${id}`);

@@ -5,7 +5,6 @@ import CustomButton from "../../components/CustomButton.tsx";
 import {Category} from "./Category.tsx";
 import UpdateItemModal from "../../components/UpdateCategoryModal.tsx";
 import {useState} from "react";
-import {replaceSpecialChars} from "../../components/utils.tsx";
 import ConfirmationModal from "../../components/DeleteModal.tsx";
 
 
@@ -21,7 +20,7 @@ export default function GridDatacard()
     const navigate = useNavigate();
 
     const handleClick = (link: string) => {
-        navigate(encodeURIComponent(replaceSpecialChars(link))); // Client-side routing without page reload
+        navigate(link); // Client-side routing without page reload
     };
     const handleDeleteCategory = async (id: string) => {
         try {
@@ -93,7 +92,7 @@ export default function GridDatacard()
                                         className="card-img-top"
                                         alt={category.title}
                                         onClick={() => {
-                                            handleClick(category.title);
+                                            category._id && handleClick(category._id);
                                         }}
                                         style={{
                                             objectFit: "contain",
