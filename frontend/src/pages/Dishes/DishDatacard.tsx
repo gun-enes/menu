@@ -19,14 +19,14 @@ export default function DishDatacard() {
 
     const handleDeleteDish = async (id: string) => {
         try {
-            const updatedData = await deleteDish(id, data);  // Pass data to the API function
+            const updatedData = await deleteDish(id, data);
             setData(updatedData);
         } catch (error: any) {
             console.error("Error deleting category:", error.message);
             setError(error.message);
         }
     };
-    const handleEdit = async (id: string, title: string, content: string, price: number, url: string, category:string) => {
+    const handleEdit = async (id: string, title: string, url: string, price: number, content: string, category:string) => {
         try {
             const newDish: Dish = {
                 title,
@@ -44,8 +44,6 @@ export default function DishDatacard() {
     };
     return (
         <>
-
-
             <div
                 className="container"
                 style={{
@@ -139,6 +137,7 @@ export default function DishDatacard() {
                                             <CustomButton text={"Delete"}
                                                           color={"#f44336"}
                                                           buttonBehaviour={() => {
+                                                              category._id && setId(category._id);
                                                               setIsConfirmationModalOpen(true);
                                                           }}/>
                                         </div>

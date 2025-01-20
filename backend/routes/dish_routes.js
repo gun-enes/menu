@@ -56,7 +56,6 @@ router.get('/', async (req, res) => {
 router.get('/category', async (req, res) => {
     try {
         const categoryId = req.query.category; // Get the category ID from the query parameter
-        console.log("hiii")
         console.log("category", categoryId)
         // Validate the category ID
         if (!categoryId || typeof categoryId !== 'string' || categoryId.trim() === '') {
@@ -107,19 +106,13 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
       const dishId = req.params.id;
-      
-      // Find the dish by ID and delete it
       const deletedDish = await Dish.findByIdAndDelete(dishId);
-  
-      // If no dish is found, return a 404 error
+      console.log("deletedDish fdsafdsafsda", deletedDish);
       if (!deletedDish) {
         return res.status(404).json({ message: 'Dish not found' });
       }
-  
-      // If deleted successfully, send the deleted dish info as a response
       res.status(200).json({ message: 'Dish deleted successfully', deletedDish });
     } catch (error) {
-      // Handle any errors that occur
       res.status(500).json({ message: 'Error deleting dish', error: error.message });
     }
   });

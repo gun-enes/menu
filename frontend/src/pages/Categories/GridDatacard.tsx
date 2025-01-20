@@ -6,10 +6,12 @@ import {Category} from "./Category.tsx";
 import UpdateItemModal from "../../components/UpdateCategoryModal.tsx";
 import {useState} from "react";
 import ConfirmationModal from "../../components/DeleteModal.tsx";
+import {useAppContext} from "../AppProvider.tsx";
 
 
 export default function GridDatacard()
 {
+    const {setHeader } = useAppContext();
     const {data, setData, setError} = useCategoryContext();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
@@ -93,6 +95,8 @@ export default function GridDatacard()
                                         alt={category.title}
                                         onClick={() => {
                                             category._id && handleClick(category._id);
+                                            setHeader(category.title);
+
                                         }}
                                         style={{
                                             objectFit: "contain",

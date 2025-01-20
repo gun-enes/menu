@@ -4,9 +4,10 @@ import CategoryDatacard from "./CategoryDatacard";
 import {CategoryContext} from "./CategoryContext.tsx";
 import {addCategory, getCategories} from "../../api/Categories.tsx";
 import GridDatacard from "./GridDatacard.tsx";
-import Navbar from "../../components/NavBar.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
 import AddCategoryModal from "../../components/AddCategoryModal.tsx";
+import LoadingPage from "../../components/LoadingPage.tsx";
+import ErrorPage from "../../components/ErrorPage.tsx";
 
 
 export default function CategoryList() {
@@ -45,17 +46,8 @@ export default function CategoryList() {
       setError(error.message);
     }
   };
-
-
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
   return (
       <>
-
-        <Navbar title={"MENÜ"}/>
-
         <nav style={{
           background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background
           padding: '0px 0px 30px 0px',
@@ -72,14 +64,18 @@ export default function CategoryList() {
             </div>
           </div>
         </nav>
-        <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
+        {loading ? <LoadingPage/> : error ? <ErrorPage errorMessage={error}/> :
+            <div>
+              <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
+              <CategoryContext.Provider value={{data, setData, setError}}>
+                {toggleDisplay ?
+                    <GridDatacard/>
+                    :
+                    <CategoryDatacard arrange={true} setCategoryId={()=>{}}/>}
+              </CategoryContext.Provider>
+            </div>
 
-        <CategoryContext.Provider value={{data, setData, setError}}>
-            {toggleDisplay ?
-                <GridDatacard/>
-                :
-                <CategoryDatacard arrange={true} setCategoryId={()=>{}}/>}
-        </CategoryContext.Provider>
+        }
       </>
 
   );

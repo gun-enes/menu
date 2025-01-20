@@ -52,7 +52,6 @@ router.get('/:id', async (req, res) => {
   try {
       const categoryId = req.params.id;
       const category = await Category.findById(categoryId);
-      console.log("hello there")
       res.json(category);
   } catch (error) {
       res.status(500).json({ message: error.message });
