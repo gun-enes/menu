@@ -5,9 +5,11 @@ import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 import {useState} from "react";
 import UpdateDishModal from "../../components/modals/UpdateDishModal.tsx";
 import {Dish} from "./Dish.tsx";
+import {useAppContext} from "../AppProvider.tsx";
 
 export default function DishDatacard() {
     const {data, setData, setError} = useDishContext();
+    const {arrange} = useAppContext();
     const [title, setTitle] = useState("");
     const [url, setUrl] = useState("");
     const [id, setId] = useState("");
@@ -75,36 +77,31 @@ export default function DishDatacard() {
                         setIsConfirmationModalOpen(false);
                     }}/>
 
-                <div className="row">
+                <div className="row g-3">
                     {data &&
                         data.map((category) => (
 
                             <div
-                                className="col-sm-6 col-md-4 col-lg-3 mb-4"
+                                className="col-6 col-sm-6 col-md-4 col-lg-3 mb-4"
                                 key={category._id}
 
                             >
 
-                                <div className="card mb-4"
-                                     style={{cursor: "pointer", borderRadius: "20px", width: "18rem"}}
+                                <div className="card mb-4 shadow-sm"
+                                     style={{cursor: "pointer", borderRadius: "20px"}}
                                 >
                                     <img
                                         src={category.url}
                                         className="card-img-top"
                                         alt={category.title}
                                         style={{
-                                            objectFit: "fill",
+                                            objectFit: "contain",
                                             height: "170px",
-                                            padding: "10px", // Add padding here
+                                            padding: "0px", // Add padding here
                                             borderRadius: "20px"
                                         }}/>
-                                    <div
-                                        className="card-body"
-                                    >
-                                        <h4
-                                            className="card-title"
-                                            style={{textAlign: "center", fontSize: "1.5rem", fontWeight: 600}}
-                                        >
+                                    <div className="card-body d-flex flex-column">
+                                        <h4 className="card-title text-center fs-5 fw-semibold">
                                             {category.title}
                                         </h4>
                                         <p
@@ -115,31 +112,36 @@ export default function DishDatacard() {
                                         </p>
                                         <h5
                                             className="card-text justify-content-end"
-                                            style={{ fontWeight: 500, textAlign: "right"}}
+                                            style={{fontWeight: 500, textAlign: "right"}}
                                         >
                                             ₺{category.price}
                                         </h5>
                                         <div className="d-flex justify-content-around align-items-center">
+                                            {arrange ? <div>
+                                                <CustomButton text={"Düzenle"}
+                                                              color={"#2196f3"}
+                                                              buttonBehaviour={() => {
+                                                                  setTitle(category.title);
+                                                                  setUrl(category.url);
+                                                                  setPrice(category.price);
+                                                                  setContent(category.content);
+                                                                  setCategory(category.category);
+                                                                  setIsModalOpen(true);
+                                                                  category._id && setId(category._id);
+                                                              }}/>
 
-                                            <CustomButton text={"Düzenle"}
-                                                          color={"#2196f3"}
-                                                          buttonBehaviour={() => {
-                                                              setTitle(category.title);
-                                                              setUrl(category.url);
-                                                              setPrice(category.price);
-                                                              setContent(category.content);
-                                                              setCategory(category.category);
-                                                              setIsModalOpen(true);
-                                                              category._id && setId(category._id);
-                                                          }}/>
+
+                                                <CustomButton text={"Delete"}
+                                                              color={"#f44336"}
+                                                              buttonBehaviour={() => {
+                                                                  category._id && setId(category._id);
+                                                                  setIsConfirmationModalOpen(true);
+                                                              }}/>
 
 
-                                            <CustomButton text={"Delete"}
-                                                          color={"#f44336"}
-                                                          buttonBehaviour={() => {
-                                                              category._id && setId(category._id);
-                                                              setIsConfirmationModalOpen(true);
-                                                          }}/>
+                                                </div> : null}
+
+
                                         </div>
                                     </div>
                                 </div>

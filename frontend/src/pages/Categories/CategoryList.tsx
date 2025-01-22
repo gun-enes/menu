@@ -8,9 +8,11 @@ import CustomButton from "../../components/CustomButton.tsx";
 import AddCategoryModal from "../../components/modals/AddCategoryModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
+import {useAppContext} from "../AppProvider.tsx";
 
 
 export default function CategoryList() {
+  const {arrange} = useAppContext();
   const [data, setData] = useState<Category[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +50,7 @@ export default function CategoryList() {
   };
   return (
       <>
+        {arrange ?
         <nav style={{
           background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background
           padding: '0px 0px 30px 0px',
@@ -63,7 +66,7 @@ export default function CategoryList() {
               </div>
             </div>
           </div>
-        </nav>
+        </nav> : null}
         {loading ? <LoadingPage/> : error ? <ErrorPage errorMessage={error}/> :
             <div>
               <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
@@ -71,7 +74,7 @@ export default function CategoryList() {
                 {toggleDisplay ?
                     <GridDatacard/>
                     :
-                    <CategoryDatacard arrange={true} setCategoryId={()=>{}}/>}
+                    <CategoryDatacard/>}
               </CategoryContext.Provider>
             </div>
 

@@ -6,7 +6,7 @@ const image_route = require('./routes/image_routes');
 const category_route = require('./routes/category_routes');
 const type_route = require('./routes/type_routes');
 const cors = require('cors');
-const category = require('./models/category');
+const category = require('./models/category_model');
 
 
 

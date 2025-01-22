@@ -3,16 +3,20 @@ import DishDatacard from "./DishDatacard";
 import { Dish } from "./Dish";
 import { useParams } from "react-router-dom";
 import { DishContext } from "./DishContext";
-import {addDish, getDishesByCategory} from "../../api/Dishes.tsx";
+import {addDish, getDishesByCategorySlug} from "../../api/Dishes.tsx";
+import {getCategoryBySlug} from "../../api/Categories.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
 import AddDishModal from "../../components/modals/AddDishModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
+import {useAppContext} from "../AppProvider.tsx";
 
 
 
 function DishList() {
-  const {category} = useParams();
+  const {slug} = useParams();
+  const {arrange} = useAppContext();
+  const [category, setCategory] = useState<string>("");
   const [data, setData] = useState<Dish[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,10 +25,15 @@ function DishList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-          console.log(category);
-          const dishes = await getDishesByCategory(category); // Fetch data from the API
-          setData(dishes);
-          setLoading(false);
+        const dishes = await getDishesByCategorySlug(slug); // Fetch data from the API
+        setData(dishes);
+        if(dishes.length > 0)
+          setCategory(dishes[0].category);
+        else{
+          const category = await getCategoryBySlug(slug);
+          setCategory(category._id);
+        }
+        setLoading(false);
       } catch (error: any) {
         setError(error.message);
         setLoading(false);
@@ -51,6 +60,7 @@ function DishList() {
 
   return (
       <>
+        {arrange ?
         <nav style={{
           background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background
           padding: '0px 0px 30px 0px',
@@ -65,11 +75,11 @@ function DishList() {
               </div>
             </div>
           </div>
-        </nav>
+        </nav>: null}
         {loading ? <LoadingPage/> : error ? <ErrorPage errorMessage={error}/> :
           <div>
             {
-              category ?         <AddDishModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit} category={category}/>
+              slug ?         <AddDishModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit} category={category}/>
                   : null
             }
             <DishContext.Provider value={{

@@ -3,7 +3,7 @@ import {Dish} from "../pages/Dishes/Dish.tsx";
 
 export const getDishes = async () => {
     try {
-        const response = await axios.get('http://192.168.1.133:4000/dishes/');
+        const response = await axios.get('http://192.168.1.12:4000/dishes/');
         return response.data;  // Return the fetched data
     } catch (error) {
         console.error("Error fetching dishes:", error);
@@ -13,7 +13,7 @@ export const getDishes = async () => {
 
 export const getDishesByCategory = async (categoryId?: string) => {
     try {
-        const response = await axios.get('http://192.168.1.133:4000/dishes/category', {
+        const response = await axios.get('http://192.168.1.12:4000/dishes/category', {
             params: {
                 category: categoryId, // Pass the category as a query parameter
             },
@@ -24,9 +24,23 @@ export const getDishesByCategory = async (categoryId?: string) => {
         throw error;
     }
 };
+
+export const getDishesByCategorySlug = async (slug?: string) => {
+    try {
+        const response = await axios.get('http://192.168.1.12:4000/dishes/category/slug', {
+            params: {
+                slug: slug, // Pass the slug as a query parameter
+            },
+        });
+        return response.data; // Return the fetched data
+    } catch (error) {
+        console.error('Error fetching dishes:', error);
+        throw error;
+    }
+}
 export const getDish = async (id: string) => {
     try {
-        const response = await axios.get(`http://192.168.1.133:4000/dishes/${id}`);
+        const response = await axios.get(`http://192.168.1.12:4000/dishes/${id}`);
         return response.data;  // Return the fetched data
     } catch (error) {
         console.error("Error fetching dish:", error);
@@ -37,7 +51,7 @@ export const getDish = async (id: string) => {
 export const updateDish = async (dishId: string, updatedDish: Dish, data?: Dish[],) => {
     try {
         const response = await axios.put<Dish>(
-            `http://192.168.1.133:4000/dishes/${dishId}`,
+            `http://192.168.1.12:4000/dishes/${dishId}`,
             updatedDish
         );
         return (data || []).map((dish:Dish) => (dish._id === dishId ? response.data : dish));
@@ -50,7 +64,7 @@ export const updateDish = async (dishId: string, updatedDish: Dish, data?: Dish[
 export const addDish = async (newDish: Dish, data?:Dish[]) => {
     try {
         const response = await axios.post<Dish>(
-            "http://192.168.1.133:4000/dishes",
+            "http://192.168.1.12:4000/dishes",
             newDish
         );
         return [...(data || []), response.data];
@@ -62,7 +76,7 @@ export const addDish = async (newDish: Dish, data?:Dish[]) => {
 
 export const deleteDish = async (id: string, data?: Dish[]) => {
     try {
-        await axios.delete(`http://192.168.1.133:4000/dishes/${id}`);
+        await axios.delete(`http://192.168.1.12:4000/dishes/${id}`);
         return (data ?? []).filter((item: Dish) => item._id !== id);
     } catch (error) {
         console.error("Error deleting dish:", error);

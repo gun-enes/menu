@@ -13,7 +13,7 @@ function App() {
           <Navbar/>
           <div>
           <Routes>
-            <Route path="/:category" element={<DishList />} />
+            <Route path="/:slug" element={<DishList />} />
             <Route path="/" element={<HomePage />} />
           </Routes>
         </div>

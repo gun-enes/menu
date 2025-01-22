@@ -11,7 +11,7 @@ import {useAppContext} from "../AppProvider.tsx";
 
 export default function GridDatacard()
 {
-    const {setHeader } = useAppContext();
+    const {setHeader, arrange} = useAppContext();
     const {data, setData, setError} = useCategoryContext();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
@@ -86,7 +86,7 @@ export default function GridDatacard()
                                         setIsConfirmationModalOpen(false);
                                     }}/>
                                 <div
-                                    className="card mb-4 shadow-sm h-100"
+                                    className="card mb-4 shadow-sm"
                                     style={{
                                         cursor: "pointer",
                                         borderRadius: "20px",
@@ -97,7 +97,7 @@ export default function GridDatacard()
                                         className="card-img-top"
                                         alt={category.title}
                                         onClick={() => {
-                                            category._id && handleClick(category._id);
+                                            category.slug && handleClick(category.slug);
                                             setHeader(category.title);
                                         }}
                                         style={{
@@ -111,22 +111,25 @@ export default function GridDatacard()
                                             {category.title}
                                         </h4>
                                         <div className="d-flex justify-content-around align-items-center">
+                                            {
+                                                arrange ? (<div>
+                                                        <CustomButton text={"Düzenle"}
+                                                                      color={"#2196f3"}
+                                                                      buttonBehaviour={() => {
+                                                                          setTitle(category.title);
+                                                                          setUrl(category.url);
+                                                                          setIsModalOpen(true);
+                                                                          category._id && setId(category._id);
+                                                                      }}/>
 
-                                                <CustomButton text={"Düzenle"}
-                                                              color={"#2196f3"}
-                                                              buttonBehaviour={() => {
-                                                                  setTitle(category.title);
-                                                                  setUrl(category.url);
-                                                                  setIsModalOpen(true);
-                                                                  category._id && setId(category._id);
-                                                              }}/>
 
+                                                    <CustomButton text={"Delete"}
+                                                                  color={"#f44336"}
+                                                                  buttonBehaviour={() => {
+                                                                      setIsConfirmationModalOpen(true);
+                                                                  }}/> </div>) : null
+                                            }
 
-                                                <CustomButton text={"Delete"}
-                                                              color={"#f44336"}
-                                                              buttonBehaviour={() => {
-                                                                    setIsConfirmationModalOpen(true);
-                                                                }}/>
                                         </div>
                                     </div>
                                 </div>
