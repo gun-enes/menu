@@ -2,7 +2,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button,
   Typography,
   IconButton,
 } from "@mui/material";
@@ -12,15 +11,8 @@ import {useNavigate} from "react-router-dom";
 import {deleteCategory} from "../../api/Categories.tsx";
 import {useAppContext} from "../AppProvider.tsx";
 
-interface CategoryDatacardProps {
-  arrange: boolean | undefined;
-  setCategoryId: (categoryId: string) => void;
-}
 
-export default function CategoryDatacard({
-  arrange,
-  setCategoryId,
-}: CategoryDatacardProps) 
+export default function CategoryDatacard()
 
 {
   const {data, setData, setError} = useCategoryContext();
@@ -66,40 +58,12 @@ export default function CategoryDatacard({
                 primary={
                   <Typography
                     variant="h5"
-                    style={{ color: "Black", fontWeight: "bold" }}
+                    style={{ color: "#ffffff", fontWeight: "bold" }}
                   >
                     {category.title}
                   </Typography>
                 }
               />
-      
-              {arrange ? (
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      category._id && setCategoryId(category._id);
-                    }}
-                    style={{ color: "white", marginRight: "10px" }}
-                  >
-                    Düzenle
-                  </Button>
-
-
-
-                  <Button
-                    variant="contained"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      category._id && handleDeleteCategory(category._id);
-                    }}
-                    style={{ color: "white", backgroundColor: "red" }}
-                  >
-                    Sil
-                  </Button>
-                </div>
-              ) : null}
               <IconButton
                 edge="end"
                 onClick={(event) => {

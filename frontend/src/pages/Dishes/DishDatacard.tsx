@@ -1,9 +1,9 @@
 import {useDishContext} from "./DishContext.tsx";
 import {deleteDish, updateDish} from "../../api/Dishes.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
-import ConfirmationModal from "../../components/DeleteModal.tsx";
+import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 import {useState} from "react";
-import UpdateDishModal from "../../components/UpdateDishModal.tsx";
+import UpdateDishModal from "../../components/modals/UpdateDishModal.tsx";
 import {Dish} from "./Dish.tsx";
 
 export default function DishDatacard() {

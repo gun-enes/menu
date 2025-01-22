@@ -2,8 +2,10 @@ import CategoryList from "./Categories/CategoryList"
 
 function HomePage() {
   return (
-            <CategoryList />
+      <>
+        <CategoryList />
+      </>
   )
 }
 
-export default HomePage
+export default HomePage;

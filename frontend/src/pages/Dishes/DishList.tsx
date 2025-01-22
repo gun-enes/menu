@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { DishContext } from "./DishContext";
 import {addDish, getDishesByCategory} from "../../api/Dishes.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
-import AddDishModal from "../../components/AddDishModal.tsx";
+import AddDishModal from "../../components/modals/AddDishModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 

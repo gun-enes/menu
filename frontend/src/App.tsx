@@ -5,12 +5,13 @@ import Navbar from "./components/NavBar.tsx";
 
 
 
+
 function App() {
   return (
     <>
-      <Navbar title={"fdsjaflşdjsak"}/>
       <Router>
-        <div>
+          <Navbar/>
+          <div>
           <Routes>
             <Route path="/:category" element={<DishList />} />
             <Route path="/" element={<HomePage />} />

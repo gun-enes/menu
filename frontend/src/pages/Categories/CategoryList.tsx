@@ -5,7 +5,7 @@ import {CategoryContext} from "./CategoryContext.tsx";
 import {addCategory, getCategories} from "../../api/Categories.tsx";
 import GridDatacard from "./GridDatacard.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
-import AddCategoryModal from "../../components/AddCategoryModal.tsx";
+import AddCategoryModal from "../../components/modals/AddCategoryModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 

@@ -1,22 +1,28 @@
 import { useAppContext } from "../pages/AppProvider";
+import {useLocation} from "react-router-dom";
+
 
 export default function Navbar() {
-    const { header } = useAppContext(); // Get header from context
+    const { header, setHeader } = useAppContext(); // Get header from context
+    const location = useLocation();
 
     const handleGoBack = () => {
         window.history.back(); // Navigate to the previous page in history
     };
+    if(location.pathname === "/"){
+        setHeader("Menü");
+    }
 
     return (
         <nav style={{
             background: 'linear-gradient(90deg, #f1356d, #e91e63)',
-            padding: '20px 40px',
+            padding: '20px 5px',
             boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         }}>
             <div className="container">
-                <div className="row align-items-center">
-                    <div className="col">
+                <div className="row align-items-start">
                         <div className="d-flex">
+                            {window.location.pathname !== "/" ? (
                             <button
                                 onClick={handleGoBack}
                                 style={{
@@ -26,7 +32,6 @@ export default function Navbar() {
                                     background: "transparent",
                                     border: "none",
                                     cursor: "pointer",
-                                    padding: "8px",
                                     borderRadius: "50%",
                                     transition: "background 0.2s ease",
                                 }}
@@ -47,6 +52,7 @@ export default function Navbar() {
                                     <path d="M15 18l-6-6 6-6"/>
                                 </svg>
                             </button>
+                            ) : null}
 
                             <h1 style={{
                                 color: 'white',
@@ -54,9 +60,8 @@ export default function Navbar() {
                                 fontSize: '2rem',
                                 fontWeight: 'bold',
                             }}>
-                                {header} {/* This will now dynamically update */}
+                                {header}
                             </h1>
-                        </div>
                     </div>
                 </div>
             </div>

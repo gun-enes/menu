@@ -14,5 +14,4 @@ export const replaceSpecialChars = (str: String) => {
       .replace(/İ/g, 'I')
       .replace(/ /g, '-')
       .toLowerCase();
-
   };

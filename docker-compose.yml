@@ -1,23 +1,42 @@
+version: '3.8'
+
 services:
-  api:
-    build:
-      context: ./backend
-    container_name: backend-container
+  frontend:
+    build: ./frontend
+    container_name: frontend
     ports:
-      - "4000:4000"
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - app-network
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "4000:4000"
     depends_on:
       - mongo
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - app-network
+
   mongo:
     image: mongo:latest
-    container_name: mongodb
+    container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
     networks:
       - app-network
+
 volumes:
   mongo-data:
 networks:

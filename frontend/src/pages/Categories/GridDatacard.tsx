@@ -3,9 +3,9 @@ import {useNavigate} from "react-router-dom";
 import {deleteCategory, updateCategory} from "../../api/Categories.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
 import {Category} from "./Category.tsx";
-import UpdateItemModal from "../../components/UpdateCategoryModal.tsx";
+import UpdateItemModal from "../../components/modals/UpdateCategoryModal.tsx";
 import {useState} from "react";
-import ConfirmationModal from "../../components/DeleteModal.tsx";
+import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 import {useAppContext} from "../AppProvider.tsx";
 
 
@@ -60,14 +60,13 @@ export default function GridDatacard()
             }}
 
             >
-                <div className="row">
+                <div className="row g-3">
                     {data &&
                         data.map((category) => (
 
                             <div
-                                className="col-sm-6 col-md-4 col-lg-3 mb-4"
+                                className="col-6 col-sm-6 col-md-4 col-lg-3"
                                 key={category._id}
-
                             >
                                 <UpdateItemModal
                                     open={isModalOpen}
@@ -82,12 +81,16 @@ export default function GridDatacard()
                                 <ConfirmationModal
                                     open={isConfirmationModalOpen}
                                     onClose={() => setIsConfirmationModalOpen(false)}
-                                    onConfirm={()=> {
+                                    onConfirm={() => {
                                         category._id && handleDeleteCategory(category._id);
                                         setIsConfirmationModalOpen(false);
                                     }}/>
-                                <div className="card mb-4"
-                                     style={{ cursor: "pointer", borderRadius: "20px", width: "18rem" }}
+                                <div
+                                    className="card mb-4 shadow-sm h-100"
+                                    style={{
+                                        cursor: "pointer",
+                                        borderRadius: "20px",
+                                    }}
                                 >
                                     <img
                                         src={category.url}
@@ -96,21 +99,15 @@ export default function GridDatacard()
                                         onClick={() => {
                                             category._id && handleClick(category._id);
                                             setHeader(category.title);
-
                                         }}
                                         style={{
+                                            width: "100%",
                                             objectFit: "contain",
-                                            height: "170px",
-                                            padding: "0px" // Add padding here
-                                        }}                                    />
-                                    <div
-                                        className="card-body"
-                                    >
-                                        <h4
-                                            className="card-title"
-                                            //center it
-                                            style={{textAlign: "center", fontSize: "1.5rem", fontWeight: 600}}
-                                        >
+                                            padding: "0px"
+                                        }}
+                                    />
+                                    <div className="card-body d-flex flex-column">
+                                        <h4 className="card-title text-center fs-5 fw-semibold">
                                             {category.title}
                                         </h4>
                                         <div className="d-flex justify-content-around align-items-center">

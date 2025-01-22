@@ -3,7 +3,7 @@ import {Category} from "../pages/Categories/Category.tsx";
 
 export const getCategories = async () => {
     try {
-        const response = await axios.get('http://localhost:4000/categories');
+        const response = await axios.get('http://192.168.1.133:4000/categories');
         return response.data;  // Return the fetched data
     } catch (error) {
         console.error("Error fetching categories:", error);
@@ -13,7 +13,7 @@ export const getCategories = async () => {
 
 export const getCategoryById = async (id?: string) => {
     try {
-        const response = await axios.get(`http://localhost:4000/categories/${id}`);
+        const response = await axios.get(`http://192.168.1.133:4000/categories/${id}`);
         return response.data;  // Return the fetched data
     } catch (error) {
         console.error("Error fetching category:", error);
@@ -23,7 +23,7 @@ export const getCategoryById = async (id?: string) => {
 
 export const deleteCategory = async (id: string, data?: Category[]) => {
     try {
-        await axios.delete(`http://localhost:4000/categories/${id}`);
+        await axios.delete(`http://192.168.1.133:4000/categories/${id}`);
         return (data ?? []).filter((item: Category) => item._id !== id);
     } catch (error) {
         console.error("Error deleting category:", error);
@@ -34,7 +34,7 @@ export const deleteCategory = async (id: string, data?: Category[]) => {
 export const addCategory = async (newCategory: Category, data?:Category[]) => {
     try {
         const response = await axios.post<Category>(
-            "http://localhost:4000/categories",
+            "http://192.168.1.133:4000/categories",
             newCategory
         );
         return [...(data || []), response.data];
@@ -47,7 +47,7 @@ export const addCategory = async (newCategory: Category, data?:Category[]) => {
 export const updateCategory = async (categoryId: string, updatedCategory: Category, data?: Category[]) => {
     try {
         const response = await axios.put<Category>(
-            `http://localhost:4000/categories/${categoryId}`,
+            `http://192.168.1.133:4000/categories/${categoryId}`,
             updatedCategory
         );
         return (data || []).map((cat:Category) => (cat._id === categoryId ? response.data : cat));
