@@ -18,6 +18,7 @@ export default function DishDatacard() {
     const [category, setCategory] = useState("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+    const blank_image_url = import.meta.env.VITE_BLANK_IMAGE_URL;
 
     const handleDeleteDish = async (id: string) => {
         try {
@@ -91,7 +92,7 @@ export default function DishDatacard() {
                                      style={{cursor: "pointer", borderRadius: "20px"}}
                                 >
                                     <img
-                                        src={category.url == '' ? category.url : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU9ljvvH7LuIvbqjBOIcUKg5X5Cxv_5AKWDA&s"}
+                                        src={category.url == '' ? category.url : blank_image_url}
                                         className="card-img-top"
                                         alt={category.title}
                                         style={{

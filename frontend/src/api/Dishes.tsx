@@ -3,7 +3,7 @@ import {Dish} from "../pages/Dishes/Dish.tsx";
 
 export const getDishes = async () => {
     try {
-        const response = await axios.get('http://192.168.1.12:4000/dishes/');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/dishes/`);
         return response.data;  // Return the fetched data
     } catch (error) {
         console.error("Error fetching dishes:", error);
@@ -13,7 +13,7 @@ export const getDishes = async () => {
 
 export const getDishesByCategory = async (categoryId?: string) => {
     try {
-        const response = await axios.get('http://192.168.1.12:4000/dishes/category', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/dishes/category`, {
             params: {
                 category: categoryId, // Pass the category as a query parameter
             },
@@ -27,7 +27,7 @@ export const getDishesByCategory = async (categoryId?: string) => {
 
 export const getDishesByCategorySlug = async (slug?: string) => {
     try {
-        const response = await axios.get('http://192.168.1.12:4000/dishes/category/slug', {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/dishes/category/slug`, {
             params: {
                 slug: slug, // Pass the slug as a query parameter
             },
@@ -40,7 +40,7 @@ export const getDishesByCategorySlug = async (slug?: string) => {
 }
 export const getDish = async (id: string) => {
     try {
-        const response = await axios.get(`http://192.168.1.12:4000/dishes/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/dishes/${id}`);
         return response.data;  // Return the fetched data
     } catch (error) {
         console.error("Error fetching dish:", error);
@@ -51,7 +51,7 @@ export const getDish = async (id: string) => {
 export const updateDish = async (dishId: string, updatedDish: Dish, data?: Dish[],) => {
     try {
         const response = await axios.put<Dish>(
-            `http://192.168.1.12:4000/dishes/${dishId}`,
+            `${import.meta.env.VITE_API_URL}/dishes/${dishId}`,
             updatedDish
         );
         return (data || []).map((dish:Dish) => (dish._id === dishId ? response.data : dish));
@@ -64,7 +64,7 @@ export const updateDish = async (dishId: string, updatedDish: Dish, data?: Dish[
 export const addDish = async (newDish: Dish, data?:Dish[]) => {
     try {
         const response = await axios.post<Dish>(
-            "http://192.168.1.12:4000/dishes",
+            `${import.meta.env.VITE_API_URL}/dishes`,
             newDish
         );
         return [...(data || []), response.data];
@@ -76,7 +76,7 @@ export const addDish = async (newDish: Dish, data?:Dish[]) => {
 
 export const deleteDish = async (id: string, data?: Dish[]) => {
     try {
-        await axios.delete(`http://192.168.1.12:4000/dishes/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/dishes/${id}`);
         return (data ?? []).filter((item: Dish) => item._id !== id);
     } catch (error) {
         console.error("Error deleting dish:", error);

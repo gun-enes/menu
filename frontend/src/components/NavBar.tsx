@@ -76,7 +76,7 @@ export default function Navbar() {
                         {location.pathname === "/" && (
                             <div className="d-flex align-items-center">
                                 <label style={{ margin: 0, cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                                    <span style={{ color: 'white', marginRight: '8px' }}>Arrange</span>
+                                    <span style={{ color: 'white', marginRight: '8px' }}>Menü Görünümü</span>
                                     <div style={{ position: 'relative' }}>
                                         <input
                                             type="checkbox"

@@ -1,12 +1,14 @@
 # Stage 1
-+containerization
-+Navbar düzgün çalışmalı
+ - Containerization
+ - Navbar düzgün çalışmalı
+ - Navbarda menü default olmamalı, ekranı yenilediğinde gelmemeli.
+ - env
+ - resim olmadığında default resim
 arrange düğmesini menü görünümü diye değiştir
-Navbarda menü default olmamalı, ekranı yenilediğinde gelmemeli.
+card tek boyutta olsun
 silme ve düzenleme tuşları ekran küçükse iconlara dönüşmeli
 content zorunlu değil, zorunlu fieldlar belirtilmeli
 modallar websitesiyle consistent olmalı
-resim olmadığında default resim
 authentication
 
 # Stage 2

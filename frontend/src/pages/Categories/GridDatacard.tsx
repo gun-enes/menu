@@ -19,6 +19,8 @@ export default function GridDatacard()
     const [url, setUrl] = useState("");
     const [id, setId] = useState("");
 
+    const blank_image_url = import.meta.env.VITE_BLANK_IMAGE_URL;
+
     const navigate = useNavigate();
 
     const handleClick = (link: string) => {
@@ -93,7 +95,7 @@ export default function GridDatacard()
                                     }}
                                 >
                                     <img
-                                        src={category.url ? category.url : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU9ljvvH7LuIvbqjBOIcUKg5X5Cxv_5AKWDA&s"}
+                                        src={category.url ? category.url : blank_image_url}
                                         className="card-img-top"
                                         alt={category.title}
                                         onClick={() => {

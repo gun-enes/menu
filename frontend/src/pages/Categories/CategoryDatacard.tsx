@@ -11,7 +11,6 @@ import {useNavigate} from "react-router-dom";
 import {deleteCategory} from "../../api/Categories.tsx";
 
 export default function CategoryDatacard()
-
 {
   const {data, setData, setError} = useCategoryContext();
   const navigate = useNavigate();
