@@ -4,7 +4,8 @@ const dishService = require("../services/dish_services");
 // @route   POST /dishes
 const createDish = async (req, res) => {
     try {
-        const { title, url, content, category, price } = req.body;
+        const { title, content, price,url, category } = req.body;
+        console.log(req.body);
         const dish = await dishService.createDish(title, url, content, category, price);
         res.status(201).json(dish);
     } catch (error) {
@@ -68,7 +69,6 @@ const getDishByCategory = async (req, res) => {
 
 const getDishByCategorySlug = async (req, res) => {
     try {
-        console.log(req.query.slug);
         const dish = await dishService.getDishByCategorySlug(req.query.slug);
         res.status(200).json(dish);
     } catch (error) {

@@ -11,7 +11,6 @@ const dishSchema = new Schema({
     },
     content: {
         type: String,
-        required: true,
     },
     category: {
         type: String,

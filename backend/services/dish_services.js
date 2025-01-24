@@ -4,7 +4,7 @@ const {Error} = require("mongoose");
 
 // Create a new dish
 const createDish = async (title, url, content, category, price) => {
-    if (!title || !content || !category || !price) {
+    if (!title || !category || !price) {
         throw new Error("All required fields must be filled");
     }
     const newDish = new Dish({ title, url, content, category, price });
@@ -64,7 +64,6 @@ const getDishByCategorySlug = async (slug) => {
     if (!dish) {
         return [];
     }
-    console.log(dish);
     return dish;
 }
 

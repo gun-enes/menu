@@ -1,6 +1,7 @@
 import { useAppContext } from "../pages/AppProvider";
 import { useLocation } from "react-router-dom";
 import {getCategoryBySlug} from "../api/Categories.tsx";
+import CustomButton from "./CustomButton.tsx";
 
 export default function Navbar() {
     const { header, setHeader, arrange, setArrange } = useAppContext(); // Added arrange to context
@@ -9,6 +10,9 @@ export default function Navbar() {
     const handleGoBack = () => {
         window.history.back();
     };
+    const handleEditMenu = () => {
+        window.location.href = "/edit-menu";
+    }
 
     if (location.pathname === "/") {
         setHeader("Menü");
@@ -72,6 +76,10 @@ export default function Navbar() {
                                 {header}
                             </h1>
                         </div>
+
+                        <CustomButton text={"Edit menü"} buttonBehaviour={()=> {
+                            handleEditMenu();
+                        }}/>
 
                         {location.pathname === "/" && (
                             <div className="d-flex align-items-center">

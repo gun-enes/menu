@@ -88,24 +88,27 @@ export default function GridDatacard()
                                         setIsConfirmationModalOpen(false);
                                     }}/>
                                 <div
-                                    className="card mb-4 shadow-sm"
+                                    className="card mb-4 shadow-sm h-100"
                                     style={{
                                         cursor: "pointer",
                                         borderRadius: "20px",
+                                        height: "300px", // Set a fixed height for uniformity
+                                    }}
+                                    onClick={() => {
+                                        category.slug && handleClick(category.slug);
+                                        setHeader(category.title);
                                     }}
                                 >
                                     <img
                                         src={category.url ? category.url : blank_image_url}
                                         className="card-img-top"
                                         alt={category.title}
-                                        onClick={() => {
-                                            category.slug && handleClick(category.slug);
-                                            setHeader(category.title);
-                                        }}
                                         style={{
                                             width: "100%",
-                                            objectFit: "contain",
-                                            padding: "0px"
+                                            height: "200px", // Ensure all images have the same height
+                                            objectFit: "cover", // Crops and fits the image without distortion
+                                            borderTopLeftRadius: "20px",
+                                            borderTopRightRadius: "20px",
                                         }}
                                     />
                                     <div className="card-body d-flex flex-column">
@@ -114,24 +117,28 @@ export default function GridDatacard()
                                         </h4>
                                         <div className="d-flex justify-content-around align-items-center">
                                             {
-                                                arrange ? (<div>
-                                                        <CustomButton text={"Düzenle"}
-                                                                      color={"#2196f3"}
-                                                                      buttonBehaviour={() => {
-                                                                          setTitle(category.title);
-                                                                          setUrl(category.url);
-                                                                          setIsModalOpen(true);
-                                                                          category._id && setId(category._id);
-                                                                      }}/>
-
-
-                                                    <CustomButton text={"Delete"}
-                                                                  color={"#f44336"}
-                                                                  buttonBehaviour={() => {
-                                                                      setIsConfirmationModalOpen(true);
-                                                                  }}/> </div>) : null
+                                                arrange ? (
+                                                    <div>
+                                                        <CustomButton
+                                                            text={"Düzenle"}
+                                                            color={"#2196f3"}
+                                                            buttonBehaviour={() => {
+                                                                setTitle(category.title);
+                                                                setUrl(category.url);
+                                                                setIsModalOpen(true);
+                                                                category._id && setId(category._id);
+                                                            }}
+                                                        />
+                                                        <CustomButton
+                                                            text={"Delete"}
+                                                            color={"#f44336"}
+                                                            buttonBehaviour={() => {
+                                                                setIsConfirmationModalOpen(true);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ) : null
                                             }
-
                                         </div>
                                     </div>
                                 </div>

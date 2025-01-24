@@ -29,7 +29,7 @@ export default function DishDatacard() {
             setError(error.message);
         }
     };
-    const handleEdit = async (id: string, title: string, url: string, price: number, content: string, category:string) => {
+    const handleEdit = async (id: string, title: string, url: string, price: number, category: string, content:string) => {
         try {
             const newDish: Dish = {
                 title,
@@ -92,7 +92,7 @@ export default function DishDatacard() {
                                      style={{cursor: "pointer", borderRadius: "20px"}}
                                 >
                                     <img
-                                        src={category.url == '' ? category.url : blank_image_url}
+                                        src={category.url == "" ? blank_image_url : category.url }
                                         className="card-img-top"
                                         alt={category.title}
                                         style={{
@@ -123,9 +123,9 @@ export default function DishDatacard() {
                                                               color={"#2196f3"}
                                                               buttonBehaviour={() => {
                                                                   setTitle(category.title);
-                                                                  setUrl(category.url);
+                                                                  setUrl(category.url!);
                                                                   setPrice(category.price);
-                                                                  setContent(category.content);
+                                                                  setContent(category.content!);
                                                                   setCategory(category.category);
                                                                   setIsModalOpen(true);
                                                                   category._id && setId(category._id);

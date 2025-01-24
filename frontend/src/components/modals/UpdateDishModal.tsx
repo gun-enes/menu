@@ -34,17 +34,13 @@ export default function UpdateDishModal({
                                         }: UpdateDishModalProps) {
     const [errors, setErrors] = useState({
         title: false,
-        url: false,
-        price: false,
-        content: false
+        price: false  // Removed url and content from errors
     });
 
     const validateForm = () => {
         const newErrors = {
             title: !title.trim(),
-            url: !url.trim(),
-            price: price <= 0,
-            content: !content.trim()
+            price: price <= 0  // Only validate title and price
         };
         setErrors(newErrors);
         return !Object.values(newErrors).some(error => error);
@@ -63,7 +59,7 @@ export default function UpdateDishModal({
         setUrl('');
         setContent('');
         setPrice(0);
-        setErrors({ title: false, url: false, price: false, content: false });
+        setErrors({ title: false, price: false });  // Reset only relevant errors
     };
 
     const handleFieldChange = (field: string, value: string | number) => {
@@ -126,9 +122,7 @@ export default function UpdateDishModal({
                     margin="normal"
                     value={url}
                     onChange={(e) => handleFieldChange('url', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, url: !url.trim() }))}
-                    error={errors.url}
-                    helperText={errors.url && "Valid URL is required"}
+                    // Removed validation for URL
                     InputProps={{
                         style: {
                             borderRadius: '8px',
@@ -144,9 +138,7 @@ export default function UpdateDishModal({
                     rows={3}
                     value={content}
                     onChange={(e) => handleFieldChange('content', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, content: !content.trim() }))}
-                    error={errors.content}
-                    helperText={errors.content && "Content is required"}
+                    // Removed validation for content
                     InputProps={{
                         style: {
                             borderRadius: '8px',

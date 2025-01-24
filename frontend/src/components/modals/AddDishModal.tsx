@@ -15,9 +15,7 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
     const [content, setContent] = useState('');
     const [errors, setErrors] = useState({
         title: false,
-        url: false,
-        price: false,
-        content: false
+        price: false  // Removed url and content from errors
     });
 
     const validateField = (name: string, value: string | number) => {
@@ -30,9 +28,7 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
     const handleSubmit = () => {
         const newErrors = {
             title: !validateField('title', title),
-            url: !validateField('url', url),
-            price: !validateField('price', price),
-            content: !validateField('content', content)
+            price: !validateField('price', price)  // Only validate title and price
         };
 
         setErrors(newErrors);
@@ -49,7 +45,7 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
         setUrl('');
         setPrice(0);
         setContent('');
-        setErrors({ title: false, url: false, price: false, content: false });
+        setErrors({ title: false, price: false });  // Reset only relevant errors
     };
 
     const handleFieldChange = (field: string, value: string | number) => {
@@ -112,9 +108,7 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
                     margin="normal"
                     value={url}
                     onChange={(e) => handleFieldChange('url', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, url: !validateField('url', url) }))}
-                    error={errors.url}
-                    helperText={errors.url && "Valid URL is required"}
+                    // Removed validation for URL
                     InputProps={{
                         style: {
                             borderRadius: '8px',
@@ -151,9 +145,7 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
                     rows={3}
                     value={content}
                     onChange={(e) => handleFieldChange('content', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, content: !validateField('content', content) }))}
-                    error={errors.content}
-                    helperText={errors.content && "Content is required"}
+                    // Removed validation for content
                     InputProps={{
                         style: {
                             borderRadius: '8px',
