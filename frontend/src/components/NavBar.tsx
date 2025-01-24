@@ -1,5 +1,6 @@
 import { useAppContext } from "../pages/AppProvider";
 import { useLocation } from "react-router-dom";
+import {getCategoryBySlug} from "../api/Categories.tsx";
 
 export default function Navbar() {
     const { header, setHeader, arrange, setArrange } = useAppContext(); // Added arrange to context
@@ -11,6 +12,11 @@ export default function Navbar() {
 
     if (location.pathname === "/") {
         setHeader("Menü");
+    }
+    else{
+        getCategoryBySlug(location.pathname.replace("/", "")).then((category) => {
+            setHeader(category.title);
+        });
     }
 
     return (

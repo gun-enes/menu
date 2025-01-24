@@ -9,6 +9,7 @@ import AddCategoryModal from "../../components/modals/AddCategoryModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 import {useAppContext} from "../AppProvider.tsx";
+import Navbar from "../../components/NavBar.tsx";
 
 
 export default function CategoryList() {
@@ -50,6 +51,7 @@ export default function CategoryList() {
   };
   return (
       <>
+        <Navbar/>
         {arrange ?
         <nav style={{
           background: 'linear-gradient(90deg, #f1356d, #e91e63)', // Gradient background

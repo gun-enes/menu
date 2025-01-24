@@ -16,7 +16,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 // Provider component
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [theme, setTheme] = useState<string>("light");
-    const [header, setHeader] = useState<string>("Menü");
+    const [header, setHeader] = useState<string>("");
     const [arrange, setArrange] = useState<boolean>(false);
 
     return (

@@ -1,19 +1,46 @@
 # Stage 1
-Navbar düzgün çalışmalı
++containerization
++Navbar düzgün çalışmalı
+arrange düğmesini menü görünümü diye değiştir
+Navbarda menü default olmamalı, ekranı yenilediğinde gelmemeli.
+silme ve düzenleme tuşları ekran küçükse iconlara dönüşmeli
 content zorunlu değil, zorunlu fieldlar belirtilmeli
-resim urli de zorunlu değil, default resim
 modallar websitesiyle consistent olmalı
-containerization
+resim olmadığında default resim
+authentication
+
 # Stage 2
+resim urli de zorunlu değil, default resim
 Renkleri belirleyebilecekleri bir ekran lazım
-# yeni bir şema
+sipariş verme ekranı
+çerez kullanımı
+
+## Düzenleme sayfası
+Eğer ayrı olmasını arzu ediyorsa:
+- kategori tipini seçebilecek:
+		- Card:
+				- resmin ortasında
+				- resmin altında
+		- List:
+				- Ortasında
+				- başında
+
+- yemek tipini seçebilecek
+		- card
+		- düz menü olabilir
+
+Beraberse aşağıdaki seçenekler mevcut:
+- kategoriler açılabilir olabilir
+- kategoriler sabit olabilir, kağıttan bir menü gibi
+- kategorileri aşağı doğru kaydırdıkça yukarıda sekmeler hareket eder
+
+### yeni bir şema
+ - resimlerin üzerinde yazabilir kategoriler, ama kategoriler daha büyük olucaklar, central sitesindeki gibi
+ - 
+### yeni bir şema
  - Kategoriler açılabilir aşağı doğru
  - Yukarıda sekme halinde kategoriler olabilir, aşağı doğru indikçe sekmeler otomatik geçer
 
-# Stage 3
-sipariş verme ekranı
-containerization
-çerez kullanımı
 
-# Stage 4
+# Stage 3
 Ödeme

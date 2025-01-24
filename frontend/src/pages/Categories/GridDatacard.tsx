@@ -93,7 +93,7 @@ export default function GridDatacard()
                                     }}
                                 >
                                     <img
-                                        src={category.url}
+                                        src={category.url ? category.url : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQU9ljvvH7LuIvbqjBOIcUKg5X5Cxv_5AKWDA&s"}
                                         className="card-img-top"
                                         alt={category.title}
                                         onClick={() => {

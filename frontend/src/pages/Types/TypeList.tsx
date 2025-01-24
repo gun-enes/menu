@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AddButton from './AddType';
 import { Type } from './Type';
-import { replaceSpecialChars } from '../../components/utils';
+import { replaceSpecialChars } from '../../config/utils.tsx';
 
 
 export default function TypeList() {

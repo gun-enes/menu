@@ -9,14 +9,11 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {useCategoryContext} from "./CategoryContext.tsx";
 import {useNavigate} from "react-router-dom";
 import {deleteCategory} from "../../api/Categories.tsx";
-import {useAppContext} from "../AppProvider.tsx";
-
 
 export default function CategoryDatacard()
 
 {
   const {data, setData, setError} = useCategoryContext();
-  const {setHeader } = useAppContext();
   const navigate = useNavigate();
 
   const handleClick = (link: string) => {
@@ -42,7 +39,6 @@ export default function CategoryDatacard()
               <ListItem
               key={index}
               onClick={() => {
-                setHeader(category.title);
                 handleClick(category.title);
               }}
               style={{
