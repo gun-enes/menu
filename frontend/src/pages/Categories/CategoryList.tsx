@@ -1,54 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Category } from "./Category";
-import CategoryDatacard from "./CategoryDatacard";
-import {CategoryContext} from "./CategoryContext.tsx";
-import {addCategory, getCategories} from "../../api/Categories.tsx";
 import GridDatacard from "./GridDatacard.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
 import AddCategoryModal from "../../components/modals/AddCategoryModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 import {useAppContext} from "../AppProvider.tsx";
-import Navbar from "../../components/NavBar.tsx";
+import Navbar from "../../components/navbar/NavBar.tsx";
+import useFetch from "../../hooks/CategoryFetch.tsx";
+import UpdateItemModal from "../../components/modals/UpdateCategoryModal.tsx";
+import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 
 
 export default function CategoryList() {
   const {arrange} = useAppContext();
-  const [data, setData] = useState<Category[]>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const {data, loading, error, addCategory, updateCategory, deleteCategory} = useFetch();
+  const [selectedCategory, setSelectedCategory] = useState<Category>({
+    title: "",
+    url: "",
+  });
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
   const [toggleDisplay, setToggleDisplay] = useState<boolean>(true);
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const categories = await getCategories(); // Fetch data from the API
-        setData(categories);
-        setLoading(false);
-      } catch (error: any) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleSubmit = async (title: string, url: string) => {
-    try {
-      const newCategory: Category = {
-        title,
-        url,
-      };
-      const updatedData = await addCategory(newCategory, data); // Pass data to the API function
-      setData(updatedData);
-    } catch (error: any) {
-      console.error("Error adding new category:", error.message);
-      setError(error.message);
-    }
-  };
   return (
       <>
         <Navbar/>
@@ -63,7 +38,7 @@ export default function CategoryList() {
               <div className="col">
                 <div className="d-flex gap-3"> {/* Add gap between buttons */}
                   <CustomButton text={"Görünüm"} buttonBehaviour={() => setToggleDisplay(!toggleDisplay)}/>
-                  <CustomButton text={"Ekle"} buttonBehaviour={() => setIsModalOpen(!isModalOpen)}/>
+                  <CustomButton text={"Ekle"} buttonBehaviour={() => setIsAddModalOpen(!isAddModalOpen)}/>
                 </div>
               </div>
             </div>
@@ -71,13 +46,54 @@ export default function CategoryList() {
         </nav> : null}
         {loading ? <LoadingPage/> : error ? <ErrorPage errorMessage={error}/> :
             <div>
-              <AddCategoryModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit}/>
-              <CategoryContext.Provider value={{data, setData, setError}}>
-                {toggleDisplay ?
-                    <GridDatacard/>
-                    :
-                    <CategoryDatacard/>}
-              </CategoryContext.Provider>
+              <AddCategoryModal
+                  open={isAddModalOpen}
+                  onClose={() => setIsAddModalOpen(false)}
+                  onAddItem={(newCategory: Category) => {
+                    addCategory(newCategory);
+                  }}/>
+              <UpdateItemModal
+                  open={isUpdateModalOpen}
+                  onClose={() => setIsUpdateModalOpen(false)}
+                  onUpdateItem={(updatedCategory: Category) => {
+                    updatedCategory._id && updateCategory(updatedCategory._id, updatedCategory);
+                    setIsUpdateModalOpen(false);
+                  }}
+                    category={selectedCategory}
+                    setCategory={setSelectedCategory}
+              />
+              <ConfirmationModal
+                  open={isConfirmationModalOpen}
+                  onClose={() => setIsConfirmationModalOpen(false)}
+                  onConfirm={() => {
+                    selectedCategory._id && deleteCategory(selectedCategory._id);
+                    setIsConfirmationModalOpen(false);
+                  }}/>
+
+              <div
+                  className="container"
+                  style={{
+                    backgroundColor: "#f8f4ef",
+                    padding: "30px",
+                  }}
+
+              >
+                <div className="row g-3">
+                  {data &&
+                      data.map((category) => (
+                        <GridDatacard
+                            category={category}
+                            onDelete={() => {
+                              setSelectedCategory(category);
+                              setIsConfirmationModalOpen(true);
+                            }}
+                            onEdit={() => {
+                              setSelectedCategory(category);
+                              setIsUpdateModalOpen(true);
+                            }}/>
+                      ))}
+                    </div>
+                </div>
             </div>
 
         }

@@ -1,62 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DishDatacard from "./DishDatacard";
 import { Dish } from "./Dish";
 import { useParams } from "react-router-dom";
-import { DishContext } from "./DishContext";
-import {addDish, getDishesByCategorySlug} from "../../api/Dishes.tsx";
-import {getCategoryBySlug} from "../../api/Categories.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
 import AddDishModal from "../../components/modals/AddDishModal.tsx";
 import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 import {useAppContext} from "../AppProvider.tsx";
-import Navbar from "../../components/NavBar.tsx";
-
+import Navbar from "../../components/navbar/NavBar.tsx";
+import useFetch from "../../hooks/DishFetch.tsx";
+import UpdateDishModal from "../../components/modals/UpdateDishModal.tsx";
+import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 
 
 function DishList() {
   const {slug} = useParams();
+  const {data, loading, error, addDish, updateDish, deleteDish} = useFetch(slug);
   const {arrange} = useAppContext();
-  const [category, setCategory] = useState<string>("");
-  const [data, setData] = useState<Dish[]>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const dishes = await getDishesByCategorySlug(slug); // Fetch data from the API
-        setData(dishes);
-        if(dishes.length > 0)
-          setCategory(dishes[0].category);
-        else{
-          const category = await getCategoryBySlug(slug);
-          setCategory(category._id);
-        }
-        setLoading(false);
-      } catch (error: any) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
-
-  const handleSubmit = async (title: string, url: string, price: number, content: string, category:string) => {
-    const newDish: Dish = {
-      title,
-      content,
-      price,
-      url,
-      category,
-    };
-    const updatedData = await addDish(newDish, data); // Pass data to the API function
-    setData(updatedData);
-  };
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
+  const [selectedDish, setSelectedDish] = useState<Dish>({
+    title: "",
+    content: "",
+    price: 0,
+    url: "",
+    category: "",
+  });
 
 
   return (
@@ -72,27 +42,66 @@ function DishList() {
             <div className="row align-items-center">
               <div className="col">
                 <div className="d-flex gap-3">
-                  <CustomButton text={"Ekle"} buttonBehaviour={() => setIsModalOpen(!isModalOpen)}/>
+                  <CustomButton text={"Ekle"} buttonBehaviour={() => setIsAddModalOpen(!isAddModalOpen)}/>
                 </div>
               </div>
             </div>
           </div>
         </nav>: null}
         {loading ? <LoadingPage/> : error ? <ErrorPage errorMessage={error}/> :
-          <div>
-            {
-              slug ?         <AddDishModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onAddItem={handleSubmit} category={category}/>
-                  : null
-            }
-            <DishContext.Provider value={{
-              setData,
-              setError,
-              data,
-            }}>
-              <DishDatacard
+            <div
+                className="container"
+                style={{
+                  backgroundColor: "#f8f4ef",
+                  padding: "30px",
+                }}
+
+            >
+              <AddDishModal
+                  open={isAddModalOpen}
+                  onClose={() => setIsAddModalOpen(false)}
+                  onAddItem={(newDish: Dish) => {
+                      addDish(newDish);
+                    }
+                  }
+                  category={data.length > 0 ? data[0].category : slug ? slug : ""}/>
+              <UpdateDishModal
+                  open={isUpdateModalOpen}
+                  onClose={() => setIsUpdateModalOpen(false)}
+                  onUpdateItem={(updatedDish: Dish) => {
+                    selectedDish._id && updateDish(selectedDish._id, updatedDish);
+                    setIsUpdateModalOpen(false);
+                  }}
+                  dish={selectedDish}
+                  setDish={setSelectedDish}
               />
-            </DishContext.Provider>
-          </div>
+              <ConfirmationModal
+                  open={isConfirmationModalOpen}
+                  onClose={() => setIsConfirmationModalOpen(false)}
+                  onConfirm={() => {
+                    selectedDish._id && deleteDish(selectedDish._id);
+                    setIsConfirmationModalOpen(false);
+                  }}/>
+
+              <div className="row g-3">
+                {data &&
+                    data.map((dish) => (
+
+                        <DishDatacard
+                            dish={dish}
+                            onDelete={() => {
+                              setSelectedDish(dish);
+                              setIsConfirmationModalOpen(true);
+                            }}
+                            onEdit={() => {
+                              setSelectedDish(dish);
+                              setIsUpdateModalOpen(true);
+                            }}
+                            arrange={arrange}
+                        />
+                    ))}
+              </div>
+            </div>
         }
       </>
   );

@@ -5,7 +5,7 @@ const dishService = require("../services/dish_services");
 const createDish = async (req, res) => {
     try {
         const { title, content, price,url, category } = req.body;
-        console.log(req.body);
+        console.log("Dish created successfully");
         const dish = await dishService.createDish(title, url, content, category, price);
         res.status(201).json(dish);
     } catch (error) {
@@ -41,6 +41,7 @@ const updateDish = async (req, res) => {
     try {
         const { title, url, content, category, price } = req.body;
         const dish = await dishService.updateDish(req.params.id, title, url, content, category, price);
+        console.log("Dish updated successfully");
         res.status(200).json(dish);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -52,6 +53,7 @@ const updateDish = async (req, res) => {
 const deleteDish = async (req, res) => {
     try {
         await dishService.deleteDish(req.params.id);
+        console.log("Dish deleted successfully");
         res.status(200).json({ message: "Dish deleted successfully" });
     } catch (error) {
         res.status(404).json({ message: error.message });

@@ -1,36 +1,21 @@
 import { useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {Dish} from "../../pages/Dishes/Dish.tsx";
 
 interface UpdateDishModalProps {
     open: boolean;
     onClose: () => void;
-    onUpdateItem: (id: string, title: string, url: string, price: number, category: string, content: string) => void;
-    title: string;
-    url: string;
-    content: string;
-    setContent: (content: string) => void;
-    price: number;
-    setPrice: (price: number) => void;
-    category: string;
-    setTitle: (title: string) => void;
-    setUrl: (url: string) => void;
-    id: string;
+    onUpdateItem: (dish:Dish) => void;
+    dish: Dish;
+    setDish: (dish: Dish) => void;
 }
 
 export default function UpdateDishModal({
                                             open,
                                             onClose,
                                             onUpdateItem,
-                                            id,
-                                            url,
-                                            setUrl,
-                                            title,
-                                            setTitle,
-                                            content,
-                                            setContent,
-                                            price,
-                                            setPrice,
-                                            category
+                                            dish,
+                                            setDish
                                         }: UpdateDishModalProps) {
     const [errors, setErrors] = useState({
         title: false,
@@ -39,8 +24,8 @@ export default function UpdateDishModal({
 
     const validateForm = () => {
         const newErrors = {
-            title: !title.trim(),
-            price: price <= 0  // Only validate title and price
+            title: !dish.title.trim(),
+            price: dish.price <= 0  // Only validate title and price
         };
         setErrors(newErrors);
         return !Object.values(newErrors).some(error => error);
@@ -48,17 +33,20 @@ export default function UpdateDishModal({
 
     const handleSubmit = () => {
         if (validateForm()) {
-            onUpdateItem(id, title, url, price, category, content);
+            onUpdateItem(dish);
             resetForm();
             onClose();
         }
     };
 
     const resetForm = () => {
-        setTitle('');
-        setUrl('');
-        setContent('');
-        setPrice(0);
+        setDish({
+            title: '',
+            url: '',
+            content: '',
+            price: 0,
+            category: ''
+        });
         setErrors({ title: false, price: false });  // Reset only relevant errors
     };
 
@@ -68,10 +56,26 @@ export default function UpdateDishModal({
         }
 
         switch(field) {
-            case 'title': setTitle(String(value)); break;
-            case 'url': setUrl(String(value)); break;
-            case 'price': setPrice(Number(value)); break;
-            case 'content': setContent(String(value)); break;
+            case 'title':
+                setDish({
+                    ...dish,
+                    title: String(value)
+                }); break;
+            case 'url':
+                setDish({
+                    ...dish,
+                    url: String(value)
+                }); break;
+            case 'content':
+                setDish({
+                    ...dish,
+                    content: String(value)
+                }); break;
+            case 'price':
+                setDish({
+                    ...dish,
+                    price: Number(value)
+                }); break;
         }
     };
 
@@ -104,9 +108,9 @@ export default function UpdateDishModal({
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value={title}
+                    value={dish.title}
                     onChange={(e) => handleFieldChange('title', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, title: !title.trim() }))}
+                    onBlur={() => setErrors(prev => ({ ...prev, title: !dish.title.trim() }))}
                     error={errors.title}
                     helperText={errors.title && "Title is required"}
                     InputProps={{
@@ -120,7 +124,7 @@ export default function UpdateDishModal({
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value={url}
+                    value={dish.url}
                     onChange={(e) => handleFieldChange('url', e.target.value)}
                     // Removed validation for URL
                     InputProps={{
@@ -136,7 +140,7 @@ export default function UpdateDishModal({
                     margin="normal"
                     multiline
                     rows={3}
-                    value={content}
+                    value={dish.content}
                     onChange={(e) => handleFieldChange('content', e.target.value)}
                     // Removed validation for content
                     InputProps={{
@@ -151,9 +155,9 @@ export default function UpdateDishModal({
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value={price}
+                    value={dish.price}
                     onChange={(e) => handleFieldChange('price', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, price: price <= 0 }))}
+                    onBlur={() => setErrors(prev => ({ ...prev, price: dish.price <= 0 }))}
                     error={errors.price}
                     helperText={errors.price && "Price must be greater than 0"}
                     InputProps={{
@@ -179,7 +183,7 @@ export default function UpdateDishModal({
                         fontWeight: 500
                     }}
                 >
-                    İPTAL
+                    İptal
                 </Button>
                 <Button
                     onClick={handleSubmit}

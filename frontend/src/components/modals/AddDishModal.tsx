@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {Dish} from "../../pages/Dishes/Dish.tsx";
 
 interface AddDishModalProps {
     open: boolean;
     onClose: () => void;
-    onAddItem: (title: string, url: string, price: number, content: string, category: string) => void;
+    onAddItem: (dish: Dish) => void;
     category: string;
 }
 
@@ -34,7 +35,14 @@ export default function AddDishModal({ open, onClose, onAddItem, category }: Add
         setErrors(newErrors);
 
         if (!Object.values(newErrors).some(error => error)) {
-            onAddItem(title, url, price, content, category);
+            const newDish = {
+                title,
+                url,
+                price,
+                content,
+                category
+            }
+            onAddItem(newDish);
             resetForm();
             onClose();
         }

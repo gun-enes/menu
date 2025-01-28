@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import CustomButton from "../CustomButton.tsx";
+import {Category} from "../../pages/Categories/Category.tsx";
 
 interface AddCategoryModalProps {
     open: boolean;
     onClose: () => void;
-    onAddItem: (title: string, url: string) => void;
+    onAddItem: (newCategory: Category) => void;
 }
 
 export default function AddCategoryModal({ open, onClose, onAddItem }: AddCategoryModalProps) {
@@ -24,7 +25,11 @@ export default function AddCategoryModal({ open, onClose, onAddItem }: AddCatego
 
     const handleSubmit = () => {
         if (validateForm()) {
-            onAddItem(title, url);
+            const newCategory: Category = {
+                title,
+                url,
+            }
+            onAddItem(newCategory);
             setTitle('');
             setUrl('');
             onClose();

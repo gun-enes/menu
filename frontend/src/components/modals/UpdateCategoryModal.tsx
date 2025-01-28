@@ -1,26 +1,21 @@
 import { useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {Category} from "../../pages/Categories/Category.tsx";
 
 interface UpdateCategoryModalProps {
     open: boolean;
     onClose: () => void;
-    onUpdateItem: (id: string, title: string, url: string) => void;
-    title: string;
-    url: string;
-    setTitle: (title: string) => void;
-    setUrl: (url: string) => void;
-    id: string;
+    onUpdateItem: (newCategory: Category) => void;
+    category: Category;
+    setCategory: (category: Category) => void;
 }
 
 export default function UpdateCategoryModal({
                                                 open,
                                                 onClose,
                                                 onUpdateItem,
-                                                id,
-                                                url,
-                                                setUrl,
-                                                title,
-                                                setTitle,
+                                                category,
+                                                setCategory
                                             }: UpdateCategoryModalProps) {
     const [errors, setErrors] = useState({
         title: false,
@@ -29,8 +24,8 @@ export default function UpdateCategoryModal({
 
     const validateForm = () => {
         const newErrors = {
-            title: !title.trim(),
-            url: !url.trim()
+            title: !category.title.trim(),
+            url: !category.url.trim()
         };
         setErrors(newErrors);
         return !newErrors.title && !newErrors.url;
@@ -38,15 +33,17 @@ export default function UpdateCategoryModal({
 
     const handleSubmit = () => {
         if (validateForm()) {
-            onUpdateItem(id, title, url);
+            onUpdateItem(category);
             resetForm();
             onClose();
         }
     };
 
     const resetForm = () => {
-        setTitle('');
-        setUrl('');
+        setCategory({
+            title: '',
+            url: '',
+        });
         setErrors({ title: false, url: false });
     };
 
@@ -54,7 +51,7 @@ export default function UpdateCategoryModal({
         if (errors[field]) {
             setErrors(prev => ({ ...prev, [field]: false }));
         }
-        field === 'title' ? setTitle(value) : setUrl(value);
+        field === 'title' ? setCategory({ ...category, title: value }) : setCategory({ ...category, url: value });
     };
 
     return (
@@ -86,9 +83,9 @@ export default function UpdateCategoryModal({
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value={title}
+                    value={category.title}
                     onChange={(e) => handleFieldChange('title', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, title: !title.trim() }))}
+                    onBlur={() => setErrors(prev => ({ ...prev, title: !category.title.trim() }))}
                     error={errors.title}
                     helperText={errors.title && "Title is required"}
                     InputProps={{
@@ -102,9 +99,9 @@ export default function UpdateCategoryModal({
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                    value={url}
+                    value={category.url}
                     onChange={(e) => handleFieldChange('url', e.target.value)}
-                    onBlur={() => setErrors(prev => ({ ...prev, url: !url.trim() }))}
+                    onBlur={() => setErrors(prev => ({ ...prev, url: !category.url.trim() }))}
                     error={errors.url}
                     helperText={errors.url && "URL is required"}
                     InputProps={{
