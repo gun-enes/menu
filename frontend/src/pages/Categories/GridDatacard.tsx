@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import CustomButton from "../../components/CustomButton.tsx";
 import {Category} from "./Category.tsx";
 import {useAppContext} from "../AppProvider.tsx";
+import {TrashIcon} from "@heroicons/react/24/outline";
 
 
 export interface GridDatacardProps {
@@ -53,19 +54,22 @@ export default function GridDatacard({category, onDelete, onEdit}: GridDatacardP
                         <h4 className="card-title text-center fs-5 fw-semibold">
                             {category.title}
                         </h4>
-                        <div className="d-flex justify-content-around align-items-center">
+                        <div className="d-flex align-items-end">
                             {
                                 arrange ? (
-                                    <div>
+                                    <div className={"justify-content-between "}>
+                                        <TrashIcon
+                                            style={{width: '24px', height: '24px', color: '#EF4444'}} // Red color
+                                            className="hover:text-red-600 cursor-pointer"
+                                            onClick={() => {
+                                                onDelete();
+                                            }
+                                            }
+                                        />
                                         <CustomButton
                                             text={"Düzenle"}
                                             color={"#2196f3"}
                                             buttonBehaviour={onEdit}
-                                        />
-                                        <CustomButton
-                                            text={"Delete"}
-                                            color={"#f44336"}
-                                            buttonBehaviour={onDelete}
                                         />
                                     </div>
                                 ) : null

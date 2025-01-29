@@ -4,8 +4,8 @@ import axios from "axios";
 import { getCategories } from "../api/Categories.tsx";
 import { Category } from "../pages/Categories/Category.tsx";
 
-export default function useFetch()  {
-    const [data, setData] = useState<Category[]>([]);
+export default function CategoryFetch()  {
+    const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -13,7 +13,7 @@ export default function useFetch()  {
         const fetchData = async () => {
             try {
                 const categories = await getCategories(); // Fetch data from the API
-                setData(categories);
+                setCategories(categories);
             } catch (error: any) {
                 setError(error.message);
             } finally {
@@ -30,7 +30,7 @@ export default function useFetch()  {
                 `${import.meta.env.VITE_API_URL}/categories`,
                 newCategory
             );
-            setData((prevData) => [...prevData, response.data]); // Append new category
+            setCategories((prevData) => [...prevData, response.data]); // Append new category
         }
         catch (error:any){
             setError(error)
@@ -43,7 +43,7 @@ export default function useFetch()  {
                 `${import.meta.env.VITE_API_URL}/categories/${id}`,
                 updatedCategory
             );
-            setData((prevData) => prevData.map((category) => category._id === id ? response.data : category)); // Update in state
+            setCategories((prevData) => prevData.map((category) => category._id === id ? response.data : category)); // Update in state
         } catch (error: any) {
             setError(error);
         }
@@ -52,11 +52,11 @@ export default function useFetch()  {
     const deleteCategory = async (id: string) => {
         try {
             await axios.delete(`${import.meta.env.VITE_API_URL}/categories/${id}`);
-            setData((prevData) => prevData.filter((category) => category._id !== id)); // Remove from state
+            setCategories((prevData) => prevData.filter((category) => category._id !== id)); // Remove from state
         } catch (err: any) {
             setError(err);
         }
     };
 
-    return { data, loading, error, addCategory, updateCategory, deleteCategory};
+    return { categories: categories, loading, error, addCategory, updateCategory, deleteCategory};
 };

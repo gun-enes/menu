@@ -8,14 +8,14 @@ import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 import {useAppContext} from "../AppProvider.tsx";
 import Navbar from "../../components/navbar/NavBar.tsx";
-import useFetch from "../../hooks/DishFetch.tsx";
+import DishFetch from "../../hooks/DishFetch.tsx";
 import UpdateDishModal from "../../components/modals/UpdateDishModal.tsx";
 import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 
 
 function DishList() {
   const {slug} = useParams();
-  const {data, loading, error, addDish, updateDish, deleteDish} = useFetch(slug);
+  const {dishes, loading, error, addDish, updateDish, deleteDish} = DishFetch(slug);
   const {arrange} = useAppContext();
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
@@ -64,7 +64,7 @@ function DishList() {
                       addDish(newDish);
                     }
                   }
-                  category={data.length > 0 ? data[0].category : slug ? slug : ""}/>
+                  category={dishes.length > 0 ? dishes[0].category : slug ? slug : ""}/>
               <UpdateDishModal
                   open={isUpdateModalOpen}
                   onClose={() => setIsUpdateModalOpen(false)}
@@ -84,8 +84,8 @@ function DishList() {
                   }}/>
 
               <div className="row g-3">
-                {data &&
-                    data.map((dish) => (
+                {dishes &&
+                    dishes.map((dish) => (
 
                         <DishDatacard
                             dish={dish}

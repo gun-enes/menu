@@ -7,14 +7,14 @@ import LoadingPage from "../../components/LoadingPage.tsx";
 import ErrorPage from "../../components/ErrorPage.tsx";
 import {useAppContext} from "../AppProvider.tsx";
 import Navbar from "../../components/navbar/NavBar.tsx";
-import useFetch from "../../hooks/CategoryFetch.tsx";
+import CategoryFetch from "../../hooks/CategoryFetch.tsx";
 import UpdateItemModal from "../../components/modals/UpdateCategoryModal.tsx";
 import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 
 
 export default function CategoryList() {
   const {arrange} = useAppContext();
-  const {data, loading, error, addCategory, updateCategory, deleteCategory} = useFetch();
+  const {categories, loading, error, addCategory, updateCategory, deleteCategory} = CategoryFetch();
   const [selectedCategory, setSelectedCategory] = useState<Category>({
     title: "",
     url: "",
@@ -79,8 +79,8 @@ export default function CategoryList() {
 
               >
                 <div className="row g-3">
-                  {data &&
-                      data.map((category) => (
+                  {categories &&
+                      categories.map((category) => (
                         <GridDatacard
                             category={category}
                             onDelete={() => {
