@@ -1,9 +1,17 @@
 import CategoryList from "./Categories/CategoryList"
+import ListView from "./ListView/ListView.tsx";
+import SettingsFetch from "../hooks/SettingsFetch.tsx";
 
 function HomePage() {
-  return (
+    const {settings} = SettingsFetch();
+    return (
       <>
-        <CategoryList />
+          {settings ? (
+              settings.menuType == "ListView" ?
+                  <ListView />
+              : <CategoryList />) : <CategoryList />
+          }
+
       </>
   )
 }

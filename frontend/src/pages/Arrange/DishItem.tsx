@@ -1,5 +1,5 @@
 import {Divider, ListItem, ListItemText, Typography} from "@mui/material";
-import {Dish} from "../Dishes/Dish.tsx";
+import {Dish} from "../../models/Dish.tsx";
 
 export interface DishItemProps {
     dish: Dish;

@@ -7,10 +7,26 @@
  - arrange düğmesini menü görünümü diye değiştir
  - card tek boyutta olsun
  - content zorunlu değil, zorunlu fieldlar belirtilmeli
-editleme için ayrı bir yer
+ - editleme için ayrı bir yer
+ordering fields in db
+ordering
+silme butonu
+sidebar
+
+1. main menu
+2. edit content of menu -> aslında bunun buton olması daha mantıklı, style lar da bunun içinde bulunabilir
+3. settingse de butonla gidilebilir
+4. 
+5. settings
+6. 
+
+
+
 silme ve düzenleme tuşları ekran küçükse iconlara dönüşmeli
 modallar websitesiyle consistent olmalı
 authentication
+
+
 
 # Stage 2
 resim urli de zorunlu değil, default resim

@@ -1,4 +1,4 @@
-import {Dish} from "../Dishes/Dish.tsx";
+import {Dish} from "../../models/Dish.tsx";
 import {Button, TextField} from "@mui/material";
 import {useState} from "react";
 
@@ -20,6 +20,12 @@ export default function EditDish({
         title: false,
         price: false  // Removed url and content from errors
     });
+
+    const handleKeyDown = (e:any) => {
+        if (e.key === "Enter") {
+            onUpdateItem(dish);
+        }
+    };
 
 
     const handleFieldChange = (field: string, value: string | number) => {
@@ -77,6 +83,7 @@ export default function EditDish({
                         margin="normal"
                         value={dish.title}
                         onChange={(e) => handleFieldChange('title', e.target.value)}
+                        onKeyDown={handleKeyDown}
                         onBlur={() => setErrors(prev => ({ ...prev, title: !dish.title.trim() }))}
                         error={errors.title}
                         helperText={errors.title && "Title is required"}
@@ -92,6 +99,7 @@ export default function EditDish({
                         fullWidth
                         margin="normal"
                         value={dish.url}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => handleFieldChange('url', e.target.value)}
                         // Removed validation for URL
                         InputProps={{
@@ -105,6 +113,7 @@ export default function EditDish({
                         variant="outlined"
                         fullWidth
                         margin="normal"
+                        onKeyDown={handleKeyDown}
                         multiline
                         rows={3}
                         value={dish.content}
@@ -125,6 +134,8 @@ export default function EditDish({
                         value={dish.price}
                         onChange={(e) => handleFieldChange('price', e.target.value)}
                         onBlur={() => setErrors(prev => ({ ...prev, price: dish.price <= 0 }))}
+                        onKeyDown={handleKeyDown}
+                        autoFocus
                         error={errors.price}
                         helperText={errors.price && "Price must be greater than 0"}
                         InputProps={{

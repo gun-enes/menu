@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DishDatacard from "./DishDatacard";
-import { Dish } from "./Dish";
+import { Dish } from "../../models/Dish.tsx";
 import { useParams } from "react-router-dom";
 import CustomButton from "../../components/CustomButton.tsx";
 import AddDishModal from "../../components/modals/AddDishModal.tsx";

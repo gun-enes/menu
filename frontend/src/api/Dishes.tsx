@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Dish} from "../pages/Dishes/Dish.tsx";
+import {Dish} from "../models/Dish.tsx";
 
 export const getDishes = async () => {
     try {

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getCategories } from "../api/Categories.tsx";
-import { Category } from "../pages/Categories/Category.tsx";
+import { Category } from "../models/Category.tsx";
 
 export default function CategoryFetch()  {
     const [categories, setCategories] = useState<Category[]>([]);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Category } from "./Category";
+import { Category } from "../../models/Category.tsx";
 import GridDatacard from "./GridDatacard.tsx";
 import CustomButton from "../../components/CustomButton.tsx";
 import AddCategoryModal from "../../components/modals/AddCategoryModal.tsx";
@@ -22,7 +22,6 @@ export default function CategoryList() {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
-  const [toggleDisplay, setToggleDisplay] = useState<boolean>(true);
 
   return (
       <>
@@ -36,8 +35,7 @@ export default function CategoryList() {
           <div className="container">
             <div className="row align-items-center">
               <div className="col">
-                <div className="d-flex gap-3"> {/* Add gap between buttons */}
-                  <CustomButton text={"Görünüm"} buttonBehaviour={() => setToggleDisplay(!toggleDisplay)}/>
+                <div className="d-flex gap-3">
                   <CustomButton text={"Ekle"} buttonBehaviour={() => setIsAddModalOpen(!isAddModalOpen)}/>
                 </div>
               </div>
@@ -81,16 +79,7 @@ export default function CategoryList() {
                 <div className="row g-3">
                   {categories &&
                       categories.map((category) => (
-                        <GridDatacard
-                            category={category}
-                            onDelete={() => {
-                              setSelectedCategory(category);
-                              setIsConfirmationModalOpen(true);
-                            }}
-                            onEdit={() => {
-                              setSelectedCategory(category);
-                              setIsUpdateModalOpen(true);
-                            }}/>
+                        <GridDatacard category={category}/>
                       ))}
                     </div>
                 </div>

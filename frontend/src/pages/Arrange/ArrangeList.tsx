@@ -1,10 +1,10 @@
 import {List} from '@mui/material';
 import {useState} from "react";
-import {Dish} from "../Dishes/Dish.tsx";
+import {Dish} from "../../models/Dish.tsx";
 import Navbar from "../../components/navbar/NavBar.tsx";
 import ConfirmationModal from "../../components/modals/DeleteModal.tsx";
 import CategoryFetch from "../../hooks/CategoryFetch.tsx";
-import {Category} from "../Categories/Category.tsx";
+import {Category} from "../../models/Category.tsx";
 import DishFetch from "../../hooks/DishFetch.tsx";
 import {DishItem} from "./DishItem.tsx";
 import {CategoryItem} from "./CategoryItem.tsx";
@@ -77,7 +77,10 @@ export default function ArrangeList() {
 
             <div className="container-fluid vh-100 bg-light">
                 <div className="row h-100">
-                    <div className="col-12 col-md-8 col-lg-8 bg-white border-end p-3 overflow-auto">
+                    <div className="col-md-1 col-lg-1">
+                    </div>
+
+                    <div className="col-12 col-md-6 col-lg-6 bg-white border-end p-3 overflow-auto shadow-lg rounded-2xl">
                         {categories.map((category) => (
                             <div key={category._id} className="mb-4">
                                 <CategoryItem
@@ -86,39 +89,38 @@ export default function ArrangeList() {
                                         setSelectedCategory(category);
                                         setIsConfirmationModalOpen(true);
                                     }
-                                }
+                                    }
                                     onEdit={() => {
                                         setSelectedCategory(category);
                                         setIsUpdateModalOpen(true);
                                     }
-                                }/>
-                                    <List>
-                                        {dishesByCategory[category._id!]?.map((dish) => (
-                                            <div onClick={() => {
-                                                setSelectedDish(dish);
-                                            }}>
+                                    }/>
+                                <List>
+                                    {dishesByCategory[category._id!]?.map((dish) => (
+                                        <div onClick={() => {
+                                            setSelectedDish(dish);
+                                        }}>
                                             <DishItem dish={dish}/>
-                                            </div>
-                                        ))}
-                                    </List>
-                                    <button
-                                        className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center"
-                                        onClick={() => {
-                                            setSelectedCategory(category);
-                                            setIsAddDishModalOpen(true);
-                                        }}
-                                    >
-                                        <span className="me-2">+</span>
-                                    </button>
+                                        </div>
+                                    ))}
+                                </List>
+                                <button
+                                    className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center"
+                                    onClick={() => {
+                                        setSelectedCategory(category);
+                                        setIsAddDishModalOpen(true);
+                                    }}
+                                >
+                                    <span className="me-2">+</span>
+                                </button>
                             </div>
                         ))}
                     </div>
-
                     {/* Right Pane: Details (2/3 width on md+ screens) */}
                     <div className="col-12 col-md-4 col-lg-4 p-2 overflow-auto position-fixed"
-                         style={{left: "66.66%"}}>
+                         style={{left: "60%"}}>
                         {selectedDish ? (
-                        <EditDish
+                            <EditDish
                                 dish={selectedDish}
                                 onUpdateItem={(updatedDish: Dish) => {
                                     selectedDish._id && updateDish(selectedDish._id, updatedDish);
@@ -136,10 +138,9 @@ export default function ArrangeList() {
                                     <h3 className="text-muted">Select a dish to edit</h3>
                                 </div>
                             </div>
-
-
                         )}
                     </div>
+
                 </div>
             </div>
 

@@ -5,7 +5,7 @@ import {
   IconButton,
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {Category} from "./Category.tsx";
+import {Category} from "../../models/Category.tsx";
 import {useNavigate} from "react-router-dom";
 
 

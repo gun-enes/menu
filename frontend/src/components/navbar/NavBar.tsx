@@ -4,9 +4,11 @@ import {getCategoryBySlug} from "../../api/Categories.tsx";
 import CustomButton from "../CustomButton.tsx";
 import GoBackButton from "./GoBackButton.tsx";
 import CustomSwitch from "./CustomSwitch.tsx";
+import SettingsFetch from "../../hooks/SettingsFetch.tsx";
 
 export default function Navbar() {
-    const { header, setHeader, arrange, setArrange } = useAppContext(); // Added arrange to context
+    const { header, setHeader } = useAppContext(); // Added arrange to context
+    const {settings} = SettingsFetch();
     const location = useLocation();
 
     const handleGoBack = () => {
@@ -39,7 +41,7 @@ export default function Navbar() {
             <div className="container">
                 <div className="row align-items-start">
                     <div className="d-flex justify-content-between w-100">
-                        <GoBackButton header={header} handleGoBack={handleGoBack}/>
+                        <GoBackButton header={settings ? settings.businessName + " " + header: header} handleGoBack={handleGoBack}/>
 
                         {location.pathname === "/" && <CustomButton text={"Edit menü"} buttonBehaviour={()=> {
                             handleEditMenu();
@@ -47,7 +49,7 @@ export default function Navbar() {
                         }
 
                         {location.pathname === "/edit-menu" &&
-                            <CustomSwitch arrange={arrange} setArrange={setArrange}/>
+                            <CustomSwitch/>
                         }
                     </div>
                 </div>

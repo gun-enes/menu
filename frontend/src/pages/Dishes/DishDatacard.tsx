@@ -1,6 +1,6 @@
 
 import CustomButton from "../../components/CustomButton.tsx";
-import {Dish} from "./Dish.tsx";
+import {Dish} from "../../models/Dish.tsx";
 
 export interface DishDatacardProps {
     dish: Dish;

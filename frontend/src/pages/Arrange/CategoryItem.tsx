@@ -1,4 +1,4 @@
-import {Category} from "../Categories/Category.tsx";
+import {Category} from "../../models/Category.tsx";
 import {PencilIcon, TrashIcon} from "@heroicons/react/24/outline";
 
 export interface CategoryItemProps {

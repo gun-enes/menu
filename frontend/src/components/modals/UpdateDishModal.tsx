@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import {Dish} from "../../pages/Dishes/Dish.tsx";
+import {Dish} from "../../models/Dish.tsx";
 
 interface UpdateDishModalProps {
     open: boolean;

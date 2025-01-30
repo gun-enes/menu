@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import {Category} from "../../pages/Categories/Category.tsx";
+import {Category} from "../../models/Category.tsx";
 
 interface UpdateCategoryModalProps {
     open: boolean;

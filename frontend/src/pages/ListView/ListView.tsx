@@ -2,12 +2,13 @@ import { List, ListItem, ListItemText, Typography, Divider, Chip } from '@mui/ma
 import {useEffect, useState} from "react";
 import {getCategories} from "../../api/Categories.tsx";
 import {getDishes} from "../../api/Dishes.tsx";
-import {Category} from "../Categories/Category.tsx";
-import {Dish} from "../Dishes/Dish.tsx";
+import {Category} from "../../models/Category.tsx";
+import {Dish} from "../../models/Dish.tsx";
+import Navbar from "../../components/navbar/NavBar.tsx";
 
 
 
-export default function ArrangeList() {
+export default function ListView() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [dishes, setDishes] = useState<Dish[]>([]);
     useEffect(() => {
@@ -33,6 +34,8 @@ export default function ArrangeList() {
     }, {} as Record<string, Dish[]>);
 
     return (
+        <>
+            <Navbar/>
         <div style={{ maxWidth: 800, margin: '0 auto', padding: 16 }}>
             {categories.map((category) => (
                 <div key={category._id} style={{ marginBottom: 32 }}>
@@ -96,5 +99,6 @@ export default function ArrangeList() {
                 </div>
             ))}
         </div>
+        </>
     );
 }

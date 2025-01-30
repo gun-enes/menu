@@ -1,7 +1,7 @@
 // 📂 hooks/useFetch.js
 import { useState, useEffect } from "react";
 import {getDishes, getDishesByCategorySlug} from "../api/Dishes.tsx";
-import {Dish} from "../pages/Dishes/Dish.tsx";
+import {Dish} from "../models/Dish.tsx";
 import axios from "axios";
 
 export default function DishFetch(slug: string | undefined)  {

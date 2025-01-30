@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const dish_route = require('./routes/dish_routes');
 const image_route = require('./routes/image_routes');
 const category_route = require('./routes/category_routes');
+const settings_route = require('./routes/setting_routes');
 const type_route = require('./routes/type_routes');
 const cors = require('cors');
-const category = require('./models/category_model');
 
 
 
@@ -41,6 +41,7 @@ app.use('/dishes', dish_route);
 app.use('/categories', category_route);
 app.use('/images', image_route)
 app.use('/types', type_route);
+app.use('/settings', settings_route);
 
 
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {Category} from "../pages/Categories/Category.tsx";
+import {Category} from "../models/Category.tsx";
 
 export const getCategories = async () => {
     try {
